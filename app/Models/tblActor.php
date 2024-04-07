@@ -15,9 +15,4 @@ class tblActor extends Model
         'isMale', 'region', 'townCity', 'district',
         'status', 'lastUpdatedByName'
     ];
-
-    public function user (): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'user_id', 'id');
-    }
 }

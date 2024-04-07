@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTblCommoditiesTable extends Migration
+class CreateTblOrdersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,22 @@ class CreateTblCommoditiesTable extends Migration
      */
     public function up()
     {
-        Schema::create('tbl_commodities', function (Blueprint $table) {
+        Schema::create('tbl_orders', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->foreign('user_id')->references('id')
             ->on('users')->cascadeOnDelete();
             $table->string('fkWarehouseIDNo')->nullable();
-            // $table->foreign('fkWarehouseIDNo')->references('warehouseIDNo')
+            // $table->foreign('fkWarehouseIDNo')->references('warehouseID')
             // ->on('tbl_warehouses')->cascadeOnDelete();
-            $table->string('commodityName')->nullable();
-            $table->double('packingSize')->nullable();
+            $table->unsignedBigInteger('fkActorID')->nullable();
+            $table->foreign('fkActorID')->references('id')
+            ->on('tbl_actors')->cascadeOnDelete();
+            $table->string('contactPhone')->nullable();
+            $table->boolean('isBuyOrder')->nullable();
+            $table->string('transactionType')->nullable();
+            $table->text('orderDetails')->nullable();
+            $table->boolean('isComplete')->nullable();
             $table->integer('status')->nullable();
             $table->string('lastUpdatedByName')->nullable();
             $table->timestamps();
@@ -36,6 +42,6 @@ class CreateTblCommoditiesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tbl_commodities');
+        Schema::dropIfExists('tbl_orders');
     }
 }

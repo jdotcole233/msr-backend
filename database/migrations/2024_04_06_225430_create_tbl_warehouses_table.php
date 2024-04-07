@@ -15,9 +15,10 @@ class CreateTblWarehousesTable extends Migration
     {
         Schema::create('tbl_warehouses', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->foreign('user_id')->references('id')
             ->on('users')->cascadeOnDelete();
-            $table->string('warehouseIDNo', 255)->nullable();
+            $table->string('warehouseIDNo')->nullable();
             $table->string('registeredName', 255)->nullable();
             $table->string('region', 255)->nullable();
             $table->string('townCity', 255)->nullable();

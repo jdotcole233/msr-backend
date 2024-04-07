@@ -25,7 +25,7 @@ class OperatorRequest extends FormRequest
     {
         return [
             'operatorName' => 'required|string|max:255',
-            'contactPhone' => 'required',
+            'phonenumber' => 'required',
             'ageGroup' => 'required',
             'isMale' => 'required',
             'isOwner' => 'required',

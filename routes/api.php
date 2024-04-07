@@ -28,4 +28,6 @@ Route::prefix('v1')->group(function () {
     Route::apiResource('commodities', TblCommodityController::class);
     Route::apiResource('fees', TblFeeController::class);
     Route::apiResource('operator', TblOperatorController::class);
+
+    Route::put('resetpassword/{user}', [TblOperatorController::class, 'resetOperatorPassword']);
 });

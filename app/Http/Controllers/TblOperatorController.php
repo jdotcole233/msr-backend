@@ -36,8 +36,9 @@ class TblOperatorController extends Controller
         $grant_access = $request->input('grant_access');
         $random_password = Str::random(9);
 
-        $operator = tblOperator::create($request->except('grant_access', 'gender') + [
+        $operator = tblOperator::create($request->except('grant_access', 'gender', 'phonenumber') + [
             'user_id' => 1,
+            'contactPhone' => $request->input('phonenumber'),
             'fkWarehouseIDNo' => '3LFSLK',
             'isMale' => strcmp($request->input('gender'), 'Male') == 0
         ]);
@@ -113,5 +114,28 @@ class TblOperatorController extends Controller
         return response()->json([
             'message' => 'Deleted successfully'
         ], 204);
+    }
+
+
+    public function resetOperatorPassword (User $user)
+    {
+        $generate_password = Str::random(9);
+        $userUpdated = $user->update([
+            'password' => Hash::make($generate_password)
+        ]);
+
+        if (!$userUpdated)
+        {
+            return response()->json([
+                'message' => 'Reset failed'
+            ], 200);
+        }
+
+
+        //Dispatch SMS to user
+
+        return response()->json([
+            'message' => 'Reset successfuly'
+        ], 200);
     }
 }

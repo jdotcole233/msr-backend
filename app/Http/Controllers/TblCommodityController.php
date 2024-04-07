@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CommodityRequest;
 use App\Models\tblCommodity;
 use Illuminate\Http\Request;
 
@@ -14,18 +15,11 @@ class TblCommodityController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json([
+            'data' => tblCommodity::paginate(5),
+        ], 200);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -33,9 +27,17 @@ class TblCommodityController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CommodityRequest $request)
     {
-        //
+        $commodity = tblCommodity::create($request->except('warehouseID') + [
+            'user_id' => 1,
+            'fkWarehouseIDNo' => $request->input('warehouseIDNo')
+         ]);
+
+         return response()->json([
+            'message' => 'Created successfully',
+            'data' => $commodity
+         ], 201);
     }
 
     /**
@@ -44,20 +46,11 @@ class TblCommodityController extends Controller
      * @param  \App\Models\tblCommodity  $tblCommodity
      * @return \Illuminate\Http\Response
      */
-    public function show(tblCommodity $tblCommodity)
+    public function show(tblCommodity $commodity)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\tblCommodity  $tblCommodity
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(tblCommodity $tblCommodity)
-    {
-        //
+        return response()->json([
+            'data' => $commodity
+        ], 200);
     }
 
     /**
@@ -67,9 +60,20 @@ class TblCommodityController extends Controller
      * @param  \App\Models\tblCommodity  $tblCommodity
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, tblCommodity $tblCommodity)
+    public function update(CommodityRequest $request, tblCommodity $commodity)
     {
-        //
+        $commodity = $commodity->update($request->all() + ['lastUpdatedByName' => 'Cole Baidoo']);
+
+        if (!$commodity)
+        {
+            return response()->json([
+                'message' => 'Update failed',
+            ], 204);  
+        }
+
+        return response()->json([
+            'message' => 'Updated successfully',
+        ], 200);
     }
 
     /**
@@ -78,8 +82,12 @@ class TblCommodityController extends Controller
      * @param  \App\Models\tblCommodity  $tblCommodity
      * @return \Illuminate\Http\Response
      */
-    public function destroy(tblCommodity $tblCommodity)
+    public function destroy(tblCommodity $commodity)
     {
-        //
+        $commodity->delete();
+
+        return response()->json([
+            'message' => 'Deleted successfully'
+        ], 204);
     }
 }

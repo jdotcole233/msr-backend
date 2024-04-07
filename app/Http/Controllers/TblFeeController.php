@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\FeeRequest;
 use App\Models\tblFee;
 use Illuminate\Http\Request;
 
@@ -14,18 +15,11 @@ class TblFeeController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json([
+            'data' => tblFee::paginate(5)
+        ], 200);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -33,9 +27,17 @@ class TblFeeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(FeeRequest $request)
     {
-        //
+        $fee = tblFee::create($request->except('warehouseIDNo') + [
+            'user_id' => 1,
+            'fkWarehouseIDNo' => $request->input("warehouseIDNo")
+        ]);
+
+        return response()->json([
+            'message' => 'Created successfully',
+            'data' => $fee
+        ], 201);
     }
 
     /**
@@ -44,21 +46,13 @@ class TblFeeController extends Controller
      * @param  \App\Models\tblFee  $tblFee
      * @return \Illuminate\Http\Response
      */
-    public function show(tblFee $tblFee)
+    public function show(tblFee $fee)
     {
-        //
+        return response()->json([
+            'data' => $fee
+        ], 200);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\tblFee  $tblFee
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(tblFee $tblFee)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
@@ -67,9 +61,22 @@ class TblFeeController extends Controller
      * @param  \App\Models\tblFee  $tblFee
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, tblFee $tblFee)
+    public function update(FeeRequest $request, tblFee $fee)
     {
-        //
+        $fee = $fee->update($request->all() + [
+            'lastUpdatedByName' => 'Cole Baidoo'
+        ]);
+
+        if (!$fee)
+        {
+            return response()->json([
+                'message' => 'Update failed',
+            ], 204);  
+        }
+
+        return response()->json([
+            'message' => 'Updated successfully',
+        ], 200);   
     }
 
     /**
@@ -78,8 +85,12 @@ class TblFeeController extends Controller
      * @param  \App\Models\tblFee  $tblFee
      * @return \Illuminate\Http\Response
      */
-    public function destroy(tblFee $tblFee)
+    public function destroy(tblFee $fee)
     {
-        //
+        $fee->delete();
+
+        return response()->json([
+            'message' => 'Deleted successfully'
+        ], 204);
     }
 }

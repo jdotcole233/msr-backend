@@ -27,12 +27,16 @@ Route::prefix('v1/auth')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
 });
 
+Route::post('v1/warehouse', [AuthController::class, 'store']);
+
 
 Route::middleware('auth:sanctum')->group(function () {
 
     Route::prefix('v1')->group(function () {
         Route::post('/logout', [AuthController::class, 'logout']);
-        Route::apiResource('warehouse', TblWarehouseController::class);
+        // Route::apiResource('warehouse', TblWarehouseController::class);
+        Route::get('warehouse/{warehouse}', [TblWarehouseController::class, 'show']);
+        Route::put('warehouse/{warehouse}', [TblWarehouseController::class, 'update']);
         Route::apiResource('commodities', TblCommodityController::class);
         Route::apiResource('fees', TblFeeController::class);
         Route::apiResource('operator', TblOperatorController::class);

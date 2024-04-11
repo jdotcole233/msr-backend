@@ -23,19 +23,20 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-Route::prefix('auth')->group(function () {
+Route::prefix('v1/auth')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
 });
 
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/logout', [AuthController::class, 'logout']);
-Route::prefix('v1')->group(function () {
-    Route::apiResource('warehouse', TblWarehouseController::class);
-    Route::apiResource('commodities', TblCommodityController::class);
-    Route::apiResource('fees', TblFeeController::class);
-    Route::apiResource('operator', TblOperatorController::class);
 
-    Route::put('resetpassword/{user}', [TblOperatorController::class, 'resetOperatorPassword']);
-});
+    Route::prefix('v1')->group(function () {
+        Route::post('/logout', [AuthController::class, 'logout']);
+        Route::apiResource('warehouse', TblWarehouseController::class);
+        Route::apiResource('commodities', TblCommodityController::class);
+        Route::apiResource('fees', TblFeeController::class);
+        Route::apiResource('operator', TblOperatorController::class);
+
+        Route::put('resetpassword/{user}', [TblOperatorController::class, 'resetOperatorPassword']);
+    });
 });

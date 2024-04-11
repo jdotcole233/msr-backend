@@ -21,12 +21,14 @@ class AuthController extends Controller
             ], 401);
         }
 
-        $user = $request->user()->load('operator');
+        $user = $request->user()->load(['operator', 'operator.warehouse']);
+        info($user);
         $token = $user->createToken('Personal Access Token');
         $token = $token->plainTextToken;
 
         return response()->json([
             'name' => $user->operator->operatorName,
+            'warehouse' => $user->operator->warehouse->id,
             'token' => $token
         ], 200);
     }

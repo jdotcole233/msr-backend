@@ -40,6 +40,8 @@ class TblWarehouseController extends Controller
      */
     public function store(WarehouseRequest $request)
     {
+        info($request->all());
+
         $warehouse = tblWarehouse::create([
             'registeredName' => $request->input('registeredName'),
             'region' => $request->input('region'),
@@ -47,7 +49,7 @@ class TblWarehouseController extends Controller
             'district' => $request->input('district'),
             'businessType' => $request->input('businessType'),
             'storageCapacity' => $request->input('storageCapacity'),
-            'warehouseIDNo' => Str::upper(Str::random(6))
+            'warehouseIDNo' => Str::upper(Str::random(6)),
         ]);
 
         $operator = tblOperator::create([

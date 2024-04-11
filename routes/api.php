@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TblCommodityController;
 use App\Http\Controllers\TblFeeController;
 use App\Http\Controllers\TblOperatorController;
@@ -22,7 +23,13 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
+Route::prefix('auth')->group(function () {
+    Route::post('/login', [AuthController::class, 'login']);
+});
 
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/logout', [AuthController::class, 'logout']);
 Route::prefix('v1')->group(function () {
     Route::apiResource('warehouse', TblWarehouseController::class);
     Route::apiResource('commodities', TblCommodityController::class);
@@ -30,4 +37,5 @@ Route::prefix('v1')->group(function () {
     Route::apiResource('operator', TblOperatorController::class);
 
     Route::put('resetpassword/{user}', [TblOperatorController::class, 'resetOperatorPassword']);
+});
 });

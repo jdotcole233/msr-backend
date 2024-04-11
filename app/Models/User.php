@@ -45,6 +45,6 @@ class User extends Authenticatable
 
     public function operator (): HasOne
     {
-        return $this->hasOne(tblOperator::class, 'operator_id', 'id');
+        return $this->hasOne(tblOperator::class, 'id', 'operator_id');
     }
 }

@@ -18,8 +18,6 @@ class AuthController extends Controller
     {
         $credentials = \request(['phonenumber', 'password']);
 
-        info($credentials);
-
         if (!Auth::attempt($credentials))
         {
             return response()->json([
@@ -35,6 +33,9 @@ class AuthController extends Controller
         return response()->json([
             'name' => $user->operator->operatorName,
             'warehouse' => $user->operator->warehouse->id,
+            'warehouseName' => $user->operator->warehouse->registeredName,
+            'warehouseIDNo' => $user->operator->warehouse->warehouseIDNo,
+            'operatorID' => base64_encode($user->operator->id),
             'token' => $token
         ], 200);
     }

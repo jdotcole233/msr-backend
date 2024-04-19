@@ -4,82 +4,40 @@ namespace App\Http\Controllers;
 
 use App\Models\tblOrder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TblOrderController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function storage()
     {
-        //
+
+        return response()->json([
+            'data' => $this->getOrder('STORAGE')
+        ], 200);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function withdrawal()
     {
-        //
+        return response()->json([
+            'data' => $this->getOrder('WITHDRAWAL')
+        ], 200);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function offtake()
     {
-        //
+        return response()->json([
+            'data' => $this->getOrder('OFFTAKE')
+        ], 200);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\tblOrder  $tblOrder
-     * @return \Illuminate\Http\Response
-     */
-    public function show(tblOrder $tblOrder)
-    {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\tblOrder  $tblOrder
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(tblOrder $tblOrder)
+    private function getOrder(string $transactionType)
     {
-        //
-    }
+        $warehouseIDNo = Auth::user()->load(['operator'])->operator->fkWarehouseIDNo;
+        $request =tblOrder::with(['actor', 'warehouse'])->where('fkWarehouseIDNo', $warehouseIDNo)
+            ->where('transactionType', $transactionType)
+            ->paginate(5);
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\tblOrder  $tblOrder
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, tblOrder $tblOrder)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\tblOrder  $tblOrder
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(tblOrder $tblOrder)
-    {
-        //
+        return $request;
     }
 }

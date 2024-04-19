@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class OperatorRequest extends FormRequest
+class OperatorUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,12 +24,10 @@ class OperatorRequest extends FormRequest
     public function rules()
     {
         return [
-            'firstName' => 'required|string|max:255',
-            'lastName' => 'required|string|max:255',
-            'phonenumber' => 'required',
+            'operatorName' => 'required|string|max:255',
+            'contactPhone' => 'required',
             'ageGroup' => 'required',
-            'gender' => 'required',
-            'is_owner' => 'required',
+            'isMale' => 'required',
         ];
     }
 }

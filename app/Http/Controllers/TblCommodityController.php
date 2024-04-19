@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CommodityRequest;
 use App\Models\tblCommodity;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TblCommodityController extends Controller
 {
@@ -16,7 +17,7 @@ class TblCommodityController extends Controller
     public function index()
     {
         return response()->json([
-            'data' => tblCommodity::paginate(5),
+            'data' => tblCommodity::latest()->paginate(5),
         ], 200);
     }
 
@@ -29,15 +30,14 @@ class TblCommodityController extends Controller
      */
     public function store(CommodityRequest $request)
     {
-        $commodity = tblCommodity::create($request->except('warehouseID') + [
-            'user_id' => 1,
-            'fkWarehouseIDNo' => $request->input('warehouseIDNo')
-         ]);
+        $commodity = tblCommodity::create($request->all() + [
+            'user_id' => Auth::user()->id
+        ]);
 
-         return response()->json([
+        return response()->json([
             'message' => 'Created successfully',
             'data' => $commodity
-         ], 201);
+        ], 201);
     }
 
     /**
@@ -48,6 +48,7 @@ class TblCommodityController extends Controller
      */
     public function show(tblCommodity $commodity)
     {
+        info($commodity);
         return response()->json([
             'data' => $commodity
         ], 200);
@@ -64,11 +65,10 @@ class TblCommodityController extends Controller
     {
         $commodity = $commodity->update($request->all() + ['lastUpdatedByName' => 'Cole Baidoo']);
 
-        if (!$commodity)
-        {
+        if (!$commodity) {
             return response()->json([
                 'message' => 'Update failed',
-            ], 204);  
+            ], 204);
         }
 
         return response()->json([

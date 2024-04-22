@@ -48,7 +48,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
         Route::get('storage', [TblOrderController::class, 'storage']);
         Route::get('withdrawal', [TblOrderController::class, 'withdrawal']);
-        Route::get('off-take', [TblOrderController::class, 'off-take']);
+        Route::get('off-take', [TblOrderController::class, 'offtake']);
 
         Route::put('resetpassword/{user}', [TblOperatorController::class, 'resetOperatorPassword']);
         Route::put('setpassword/{operator}', [TblOperatorController::class, 'setOperatorPassword']);

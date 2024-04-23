@@ -12,15 +12,28 @@ class Warehouse extends State
         $this->menu->text("Select Warehouse")
         ->lineBreak()
         ->listing($this->warehouses)
-        ->line("Main menu");
+        ->lineBreak()
+        ->line("0. Main menu");
     }
 
     protected function afterRendering(string $argument): void
     {
-        $cache_record = json_decode($this->record->get(""));
-        // $cache_record["commodityName"] = $this->commodities[intval($argument) - 1]; 
+        $cache_record = json_decode($this->record->get($this->record->sessionId));
+
+
+        if (strcmp($argument, "0") != 0 && in_array($argument, [1, 2, 3]))
+        {
+            $cache_record["warehouseName"] = $this->warehouses[intval($argument) - 1]; 
+            $cache_record = json_encode($cache_record);
+            $this->record->set($this->record->sessionId, $cache_record);
+        }
+
 
         $this->decision->equal('0', Welcome::class)
-        ->in([1,2, 3], OrderProcess::class);
+        ->in([1,2, 3], OrderProcess::class)
+        ->custom(function () use ($cache_record) {
+            return strcmp("Withdrawal", $cache_record['transactionType']) == 0;
+        }, GRN::class)
+        ->any(Error::class);
     }
 }

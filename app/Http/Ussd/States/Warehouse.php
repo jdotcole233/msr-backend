@@ -38,8 +38,8 @@ class Warehouse extends State
     
         $this->decision->equal('0', Welcome::class)
             ->in([1, 2, 3], OrderProcess::class)
-            ->custom(function () use ($cache_record) {
-                // Check if $cache_record is an object before accessing its properties
+            ->custom(function ($input) use ($cache_record) {
+                info("input ". json_encode($input));
                 return is_object($cache_record) && strcmp("Withdrawal", $cache_record->transactionType) == 0;
             }, GRN::class)
             ->any(Error::class);

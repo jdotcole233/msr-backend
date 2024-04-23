@@ -25,8 +25,8 @@ class Warehouse extends State
         if (strcmp($argument, "0") != 0 && in_array($argument, [1, 2, 3]))
         {
             $cache_record->warehouseName = $this->warehouses[intval($argument) - 1]; 
-            $cache_record = json_encode($cache_record);
-            $this->record->set($this->record->sessionId, $cache_record);
+            $cache_record_temp = json_encode($cache_record);
+            $this->record->set($this->record->sessionId, $cache_record_temp);
         }
 
         info(json_encode($cache_record));

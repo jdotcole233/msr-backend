@@ -30,7 +30,7 @@ class Welcome extends State
         $this->menu->text($message)
             ->lineBreak(2)
             ->line("Select option")
-            ->listing($this->transactionTypes, ".", " ");
+            ->listing($this->transactionTypes, ".");
     }
 
     protected function afterRendering(string $argument): void

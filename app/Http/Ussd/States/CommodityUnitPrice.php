@@ -8,7 +8,7 @@ class CommodityUnitPrice extends State
 {
     protected function beforeRendering(): void
     {
-        $this->menu->text("Enter Unit Price");
+        $this->menu->text("Enter Unit Price (GHS)");
     }
 
     protected function afterRendering(string $argument): void

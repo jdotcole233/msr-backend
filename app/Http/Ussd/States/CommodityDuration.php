@@ -8,7 +8,7 @@ class CommodityDuration extends State
 {
     protected function beforeRendering(): void
     {
-        $this->menu->text("Enter duration");
+        $this->menu->text("Enter duration (in Months)");
     }
 
     protected function afterRendering(string $argument): void

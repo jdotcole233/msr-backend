@@ -14,11 +14,13 @@ class CommodityDuration extends State
     protected function afterRendering(string $argument): void
     {
         $cache_record = json_decode($this->record->get($this->record->sessionId));
-        $cache_record['duration'] = $argument; 
-        $cache_record = json_encode($cache_record);
-        $this->record->set($this->record->sessionId, $cache_record);
+        if (is_object($cache_record)) {
+            $cache_record['duration'] = $argument;
+            $cache_record = json_encode($cache_record);
+            $this->record->set($this->record->sessionId, $cache_record);
+        }
 
         $this->decision->numeric(PackageSize::class)
-        ->any(Error::class);
+            ->any(Error::class);
     }
 }

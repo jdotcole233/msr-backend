@@ -29,20 +29,6 @@ class Warehouse extends State
             $this->record->set($this->record->sessionId, $cache_record_temp);
         }
 
-        info(json_encode($cache_record));
-        // Ensure $cache_record is an object before accessing its properties
-        if (is_object($cache_record)) {
-            info(json_encode($cache_record->transactionType));
-            info(json_encode(strcmp("Withdrawal", $cache_record->transactionType) == 0));
-        }
-
-        // $this->decision->setOutputForCondition();
-        info(json_encode($argument));
-
-        if (is_object($cache_record) && strcmp("Withdrawal", $cache_record->transactionType) == 0) {
-            $argument = "6";
-            info("here ");
-        }
 
         $this->decision->custom(function () use ($cache_record) {
             return is_object($cache_record) && strcmp("Withdrawal", $cache_record->transactionType) === 0;

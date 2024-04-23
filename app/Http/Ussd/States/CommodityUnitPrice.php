@@ -15,7 +15,7 @@ class CommodityUnitPrice extends State
     {
         $cache_record = json_decode($this->record->get($this->record->sessionId));
         if (is_object($cache_record)) {
-            $cache_record['unit_price'] = $argument;
+            $cache_record->unit_price = $argument;
             $cache_record = json_encode($cache_record);
             $this->record->set($this->record->sessionId, $cache_record);
 

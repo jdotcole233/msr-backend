@@ -17,7 +17,7 @@ class PackageSize extends State
 
         if (is_object($cache_record))
         {
-            $cache_record['package_size'] = $argument; 
+            $cache_record->package_size = $argument; 
             $cache_record = json_encode($cache_record);
             $this->record->set($this->record->sessionId, $cache_record);
         }

@@ -15,7 +15,7 @@ class CommodityDuration extends State
     {
         $cache_record = json_decode($this->record->get($this->record->sessionId));
         if (is_object($cache_record)) {
-            $cache_record['duration'] = $argument;
+            $cache_record->duration = $argument;
             $cache_record = json_encode($cache_record);
             $this->record->set($this->record->sessionId, $cache_record);
         }

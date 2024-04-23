@@ -23,7 +23,7 @@ class Commodity extends State
 
         if (is_object($cache_record) && strcmp($argument, "0") != 0 && in_array($argument, [1, 2, 3, 4, 5, 6]))
         {
-            $cache_record['commodityName'] = $this->commodities[intval($argument) - 1]; 
+            $cache_record->commodityName = $this->commodities[intval($argument) - 1]; 
             $cache_record = json_encode($cache_record);
             $this->record->set($this->record->sessionId, $cache_record);
         }

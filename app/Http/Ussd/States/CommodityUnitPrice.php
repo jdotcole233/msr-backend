@@ -4,17 +4,17 @@ namespace App\Http\Ussd\States;
 
 use Sparors\Ussd\State;
 
-class CommodityDuration extends State
+class CommodityUnitPrice extends State
 {
     protected function beforeRendering(): void
     {
-        $this->menu->text("Enter duration");
+        $this->menu->text("Enter Unit Price");
     }
 
     protected function afterRendering(string $argument): void
     {
         $cache_record = json_decode($this->record->get($this->record->sessionId));
-        $cache_record['duration'] = $argument; 
+        $cache_record['unit_price'] = $argument; 
         $cache_record = json_encode($cache_record);
         $this->record->set($this->record->sessionId, $cache_record);
 

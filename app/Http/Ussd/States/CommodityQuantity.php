@@ -13,10 +13,12 @@ class CommodityQuantity extends State
 
     protected function afterRendering(string $argument): void
     {
-        $cache_record = json_decode($this->record->get(""));
-        $cache_record["quantity"] = $argument; 
+        $cache_record = json_decode($this->record->get($this->record->sessionId));
+        $cache_record['quantity'] = $argument; 
         $cache_record = json_encode($cache_record);
-        $this->record->set("", $cache_record);
-        $this->decision->numeric(PackageSize::class);
+        $this->record->set($this->record->sessionId, $cache_record);
+
+        $this->decision->numeric(PlaceOrder::class)
+        ->any(Error::class);
     }
 }

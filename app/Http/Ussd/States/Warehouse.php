@@ -40,7 +40,9 @@ class Warehouse extends State
     
         $this->decision->equal('0', Welcome::class)
             ->in([1, 2, 3], OrderProcess::class)
-            ->setOutputForCondition(is_object($cache_record) && strcmp("Withdrawal", $cache_record->transactionType) == 0, GRN::class)
+            ->custom(function ($user_input) use ($cache_record) {
+               return is_object($cache_record) && strcmp("Withdrawal", $cache_record->transactionType) == 0;
+            }, GRN::class)
             ->any(Error::class);
     }
     

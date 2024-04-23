@@ -35,13 +35,15 @@ class Warehouse extends State
             info(json_encode($cache_record->transactionType));
             info(json_encode(strcmp("Withdrawal", $cache_record->transactionType) == 0));
         }
+        
+        if (is_object($cache_record) && strcmp("Withdrawal", $cache_record->transactionType) == 0)
+        {
+            $argument = "Withdrawal";
+        }
     
         $this->decision->equal('0', Welcome::class)
             ->in([1, 2, 3], OrderProcess::class)
-            ->custom(function ($input) use ($cache_record) {
-                info("input ". json_encode($input));
-                return is_object($cache_record) && strcmp("Withdrawal", $cache_record->transactionType) == 0;
-            }, GRN::class)
+            ->equal("Withdrawal", GRN::class)
             ->any(Error::class);
     }
     

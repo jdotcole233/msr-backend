@@ -20,6 +20,7 @@ class Warehouse extends State
     {
         $cache_record = json_decode($this->record->get($this->record->sessionId));
 
+        info(json_encode($cache_record));
 
         if (strcmp($argument, "0") != 0 && in_array($argument, [1, 2, 3]))
         {
@@ -28,6 +29,7 @@ class Warehouse extends State
             $this->record->set($this->record->sessionId, $cache_record);
         }
 
+        info(json_encode($cache_record));
 
         $this->decision->equal('0', Welcome::class)
         ->in([1,2, 3], OrderProcess::class)

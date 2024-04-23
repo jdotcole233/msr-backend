@@ -23,7 +23,7 @@ class Warehouse extends State
 
         if (strcmp($argument, "0") != 0 && in_array($argument, [1, 2, 3]))
         {
-            $cache_record["warehouseName"] = $this->warehouses[intval($argument) - 1]; 
+            $cache_record->warehouseName = $this->warehouses[intval($argument) - 1]; 
             $cache_record = json_encode($cache_record);
             $this->record->set($this->record->sessionId, $cache_record);
         }
@@ -32,7 +32,7 @@ class Warehouse extends State
         $this->decision->equal('0', Welcome::class)
         ->in([1,2, 3], OrderProcess::class)
         ->custom(function () use ($cache_record) {
-            return strcmp("Withdrawal", $cache_record['transactionType']) == 0;
+            return strcmp("Withdrawal", $cache_record->transactionType) == 0;
         }, GRN::class)
         ->any(Error::class);
     }

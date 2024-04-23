@@ -39,7 +39,7 @@ class Welcome extends State
         if (in_array($argument, [1, 2, 3, 4]))
         {
             $cache_record = json_decode($this->record->get($this->record->sessionId));
-            $cache_record->transactionType = $this->transactionTypes[intval($argument) - 1]; 
+            $cache_record['transactionType'] = $this->transactionTypes[intval($argument) - 1]; 
             $cache_record = json_encode($cache_record);
             $this->record->set($this->record->sessionId, $cache_record);
         }

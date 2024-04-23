@@ -7,8 +7,10 @@ use App\Http\Controllers\TblFeeController;
 use App\Http\Controllers\TblOperatorController;
 use App\Http\Controllers\TblWarehouseController;
 use App\Http\Controllers\TblOrderController;
+use App\Http\Ussd\States\Welcome;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Sparors\Ussd\Facades\Ussd;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,6 +33,29 @@ Route::prefix('v1/auth')->group(function () {
 
 
 Route::post('v1/warehouse', [AuthController::class, 'store']);
+
+Route::post('v1/ussd', function (Request $request) {
+    $ussd = Ussd::machine()
+        ->setFromRequest([
+            'user_id' => 'USERID',
+            'phone_number' => 'MSISDN',
+            'input' => 'USERDATA',
+            'network' => 'NETWORK',
+            'msg_type' => 'MSGTYPE',
+            'session_id' => 'SESSIONID',
+        ])
+        ->setInitialState(Welcome::class)
+        ->setResponse(function(string $message, string $action) use ($request) {
+            return [
+                'USERID' => 'hartech1',
+                'MSISDN' => $request->input('MSISDN'),
+                'MSG' => $message,
+                'MSGTYPE' => strcmp($action, 'input') == 0,
+            ];
+        });
+
+    return response()->json($ussd->run());
+});
 
 
 Route::middleware('auth:sanctum')->group(function () {

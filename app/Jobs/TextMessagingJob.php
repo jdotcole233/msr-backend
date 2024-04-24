@@ -38,16 +38,16 @@ class TextMessagingJob implements ShouldQueue
 
         // Send SMS
         $message = "Details of your " . $this->msrUSSDRequest->getTransactionType() . " request:";
-        $message .= "Commoidity: " . $this->msrUSSDRequest->getCommodityName();
-        $message .= "Quantity: " . $this->msrUSSDRequest->getQuantity();
-        $message .= "Size : " . $this->msrUSSDRequest->getPackageSize();
+        $message .= "\nCommoidity: " . $this->msrUSSDRequest->getCommodityName();
+        $message .= "\nQuantity: " . $this->msrUSSDRequest->getQuantity();
+        $message .= "\nSize : " . $this->msrUSSDRequest->getPackageSize();
 
         if (strcmp($this->msrUSSDRequest->getTransactionType(), "Storage")) {
-            $message .= "Duration: " . $this->msrUSSDRequest->getDuration();
+            $message .= "\nDuration: " . $this->msrUSSDRequest->getDuration();
         } else if (strcmp($this->msrUSSDRequest->getTransactionType(), "Withdrawal")) {
-            $message .= "GRN ID: " . $this->msrUSSDRequest->getGRNID();
+            $message .= "\nGRN ID: " . $this->msrUSSDRequest->getGRNID();
         } else {
-            $message .= "Unit price (GHS): " . $this->msrUSSDRequest->getUnitPrice();
+            $message .= "\nUnit price (GHS): " . $this->msrUSSDRequest->getUnitPrice();
         }
 
         $message .= "\nAn operator from " . $this->msrUSSDRequest->getWarehouseName() . " will contact you soon";

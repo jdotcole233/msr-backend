@@ -42,9 +42,9 @@ class TextMessagingJob implements ShouldQueue
         $message .= "\nQuantity: " . $this->msrUSSDRequest->getQuantity();
         $message .= "\nSize : " . $this->msrUSSDRequest->getPackageSize();
 
-        if (strcmp($this->msrUSSDRequest->getTransactionType(), "Storage")) {
+        if (strcmp($this->msrUSSDRequest->getTransactionType(), "Storage") == 0) {
             $message .= "\nDuration: " . $this->msrUSSDRequest->getDuration();
-        } else if (strcmp($this->msrUSSDRequest->getTransactionType(), "Withdrawal")) {
+        } else if (strcmp($this->msrUSSDRequest->getTransactionType(), "Withdrawal") == 0) {
             $message .= "\nGRN ID: " . $this->msrUSSDRequest->getGRNID();
         } else {
             $message .= "\nUnit price (GHS): " . $this->msrUSSDRequest->getUnitPrice();

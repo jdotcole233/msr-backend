@@ -53,6 +53,8 @@ class TextMessagingJob implements ShouldQueue
         $message .= "\nAn operator from " . $this->msrUSSDRequest->getWarehouseName() . " will contact you soon";
         $message .= "\nThank you";
 
+        info(config('app.sms_key'));
+        info(config('app.sms_userid'));
 
         $request = Http::post(config('app.sms_endpoint'), [
             'key' => config('app.sms_key'),

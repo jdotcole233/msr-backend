@@ -25,8 +25,8 @@ class PlaceOrder extends State
                 $cache_record->commodityName ?? "",
                 $cache_record->unit_price ?? "",
                 $cache_record->duration ?? "",
-                $cache_record->quantity,
-                $cache_record->package_size,
+                $cache_record->quantity ?? "",
+                $cache_record->package_size ?? "",
                 $cache_record->grnID ?? "",
                 $this->record->phoneNumber
             );

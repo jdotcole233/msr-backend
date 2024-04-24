@@ -22,7 +22,7 @@ class PlaceOrder extends State
             $ussdRequest = new MsrUSSDRequest(
                 $cache_record->transactionType,
                 $cache_record->warehouseName,
-                $cache_record->commodityName,
+                $cache_record->commodityName ?? "",
                 $cache_record->unit_price ?? "",
                 $cache_record->duration ?? "",
                 $cache_record->quantity,

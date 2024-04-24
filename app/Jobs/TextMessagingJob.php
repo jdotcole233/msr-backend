@@ -38,15 +38,19 @@ class TextMessagingJob implements ShouldQueue
 
         // Send SMS
         $message = "Details of your " . $this->msrUSSDRequest->getTransactionType() . " request:";
-        $message .= "\nCommoidity: " . $this->msrUSSDRequest->getCommodityName();
-        $message .= "\nQuantity: " . $this->msrUSSDRequest->getQuantity();
-        $message .= "\nSize : " . $this->msrUSSDRequest->getPackageSize();
+        
 
         if (strcmp($this->msrUSSDRequest->getTransactionType(), "Storage") == 0) {
+            $message .= "\nCommoidity: " . $this->msrUSSDRequest->getCommodityName();
+        $message .= "\nQuantity: " . $this->msrUSSDRequest->getQuantity();
+        $message .= "\nSize : " . $this->msrUSSDRequest->getPackageSize();
             $message .= "\nDuration: " . $this->msrUSSDRequest->getDuration();
         } else if (strcmp($this->msrUSSDRequest->getTransactionType(), "Withdrawal") == 0) {
             $message .= "\nGRN ID: " . $this->msrUSSDRequest->getGRNID();
         } else {
+            $message .= "\nCommoidity: " . $this->msrUSSDRequest->getCommodityName();
+        $message .= "\nQuantity: " . $this->msrUSSDRequest->getQuantity();
+        $message .= "\nSize : " . $this->msrUSSDRequest->getPackageSize();
             $message .= "\nUnit price (GHS): " . $this->msrUSSDRequest->getUnitPrice();
         }
 

@@ -55,7 +55,7 @@ class Welcome extends State
                 ->any(Error::class);
         } else {
 
-            if (is_object($cache_record) && in_array($argument, [1, 2, 3, 4])) {
+            if (in_array($argument, [1, 2, 3, 4])) {
                 info("setting transaction..");
                 $cache_record['transactionType'] = $this->transactionTypes[intval($argument) - 1];
                 $cache_record = json_encode($cache_record);

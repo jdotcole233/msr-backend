@@ -34,7 +34,7 @@ class Welcome extends State
             $cache_record['init'] = 'START';
             $cache_record = json_encode($cache_record);
             $this->record->set($this->record->sessionId, $cache_record);
-            
+
             $this->menu->text($message)
                 ->lineBreak(2)
                 ->line("1. Register");
@@ -50,7 +50,7 @@ class Welcome extends State
     {
         $cache_record = json_decode($this->record->get($this->record->sessionId));
 
-        if (is_object($cache_record) && strcmp($cache_record['init'], "START") === 0) {
+        if (is_object($cache_record) && strcmp($cache_record->init, "START") === 0) {
             $this->decision->equal("1", RegionState::class)
                 ->any(Error::class);
         } else {

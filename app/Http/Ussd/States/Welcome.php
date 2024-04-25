@@ -54,10 +54,13 @@ class Welcome extends State
             $this->decision->equal("1", RegionState::class)
                 ->any(Error::class);
         } else {
+
             if (is_object($cache_record) && in_array($argument, [1, 2, 3, 4])) {
+                info("setting transaction..");
                 $cache_record['transactionType'] = $this->transactionTypes[intval($argument) - 1];
                 $cache_record = json_encode($cache_record);
                 $this->record->set($this->record->sessionId, $cache_record);
+                info("Transaction set..");
             }
 
             $this->decision->between(1, 3, Commodity::class)

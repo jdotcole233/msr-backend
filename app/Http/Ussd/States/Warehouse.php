@@ -22,12 +22,13 @@ class Warehouse extends State
 
         info(json_encode($cache_record));
 
-        if (strcmp($argument, "0") != 0 && in_array($argument, [1, 2, 3]) && is_object($cache_record)) 
-        {
+        if (in_array($argument, [1, 2, 3]) && is_object($cache_record)) {
             // Access object properties using -> operator
             $cache_record->warehouseName = $this->warehouses[intval($argument) - 1];
             $cache_record_temp = json_encode($cache_record);
             $this->record->set($this->record->sessionId, $cache_record_temp);
+            info("Warehouse 22 ");
+
         }
 
         $this->decision->custom(function () use ($cache_record) {

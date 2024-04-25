@@ -26,7 +26,7 @@ class Welcome extends State
             $message = "Welcome " . $actor->name ?? "to MSR";
         }
 
-        if (empty($actor) && is_object($cache_record)) {
+        if (is_null($actor) && is_object($cache_record)) {
             $cache_record['init'] = 'START';
             $this->menu->text($message)
                 ->lineBreak(2)

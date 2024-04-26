@@ -27,7 +27,7 @@ class RegionPageThreeState extends State
     {
         $cache_record = json_decode($this->record->get($this->record->sessionId));
         
-        if (is_object($cache_record) && is_int($argument)) {
+        if (is_object($cache_record) && (intval($argument) >= 1 && intval($argument) <= 4)) {
             $cache_record->region = $this->regions[intval($argument) - 1];
             $cache_record->phoneNumer = $this->record->phoneNumber;
             $cache_record = json_encode($cache_record);

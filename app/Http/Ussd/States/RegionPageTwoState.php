@@ -31,7 +31,7 @@ class RegionPageTwoState extends State
         $this->menu->text("Select your region")
         ->lineBreak(2)
         ->paginateListing($this->regions, 7, 12)
-        ->lineBreak()
+        ->lineBreak(2)
         ->line("9. Next Page")
         ->line("#. Go Back")
         ->line("0. Main menu");

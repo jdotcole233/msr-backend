@@ -29,7 +29,7 @@ class RegionState extends State
         $this->menu->text("Select your region")
             ->lineBreak(2)
             ->paginateListing($this->regions, 1, 6)
-            ->lineBreak()
+            ->lineBreak(2)
             ->line("9. Next Page")
             ->line("0. Main menu");
     }

@@ -3,6 +3,7 @@
 namespace App\Http\Ussd\States;
 
 use App\Models\tblActor;
+use App\Models\tblWarehouse;
 use Illuminate\Http\Request;
 use Sparors\Ussd\Machine;
 use Sparors\Ussd\State;
@@ -18,16 +19,18 @@ class Welcome extends State
     {
         // Check if actor exists
         $actor = tblActor::where('contactPhone', $this->record->phoneNumber)->first();
+        $warehouses = tblWarehouse::with(['commodities'])->where('region', $actor->region)->get();
+
         $message = "Welcome to MSR";
-        $this->record->set($this->record->sessionId, json_encode([]));
+        $this->record->set($this->record->sessionId, json_encode([
+            'actor_id' => $actor->id,
+            'warehouses' => $warehouses
+        ]));
 
         if (!empty($actor)) {
             $message = "Welcome " . $actor->name ?? "to MSR";
         }
 
-        info("actor " . json_encode($actor));
-        info("actor " . json_encode(is_null($actor)));
-        // info("actor ". json_encode(is_object($cache_record)));
 
         if (is_null($actor)) {
             $cache_record = json_decode($this->record->get($this->record->sessionId));
@@ -56,15 +59,13 @@ class Welcome extends State
         } else {
 
             if (in_array($argument, [1, 2, 3, 4])) {
-                info("setting transaction..");
                 $cache_record['transactionType'] = $this->transactionTypes[intval($argument) - 1];
                 $cache_record = json_encode($cache_record);
                 $this->record->set($this->record->sessionId, $cache_record);
-                info("Transaction set..");
             }
 
-            $this->decision->between(1, 3, Commodity::class)
-                ->equal('4', Warehouse::class)
+            $this->decision->between(1, 4, Warehouse::class)
+                // ->equal('4', Warehouse::class)
                 ->any(Error::class);
         }
     }

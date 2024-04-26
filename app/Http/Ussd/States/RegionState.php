@@ -12,23 +12,13 @@ class RegionState extends State
         "Bono East",
         "Central",
         "Eastern",
-        "Greater Accra",
-        "Northern",
-        "Upper East",
-        "Upper West",
-        "Volta",
-        "Western",
-        "Savannah",
-        "Oti",
-        "Ahafo",
-        "Western North",
-        "North East"
+        "Greater Accra"
     ];
     protected function beforeRendering(): void
     {
         $this->menu->text("Select your region")
             ->lineBreak(2)
-            ->paginateListing($this->regions, 1, 6)
+            ->listing($this->regions)
             ->lineBreak(2)
             ->line("n. Next Page")
             ->line("0. Main menu");

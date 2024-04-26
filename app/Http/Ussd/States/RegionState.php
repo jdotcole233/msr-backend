@@ -30,7 +30,7 @@ class RegionState extends State
             ->lineBreak(2)
             ->paginateListing($this->regions, 1, 6)
             ->lineBreak(2)
-            ->line("9. Next Page")
+            ->line("n. Next Page")
             ->line("0. Main menu");
     }
 
@@ -44,9 +44,9 @@ class RegionState extends State
             $cache_record = json_encode($cache_record);
             $this->record->set($this->record->sessionId, $cache_record);
         }
-        $this->decision->between(1, 16, GenderState::class)
+        $this->decision->between(1, 6, GenderState::class)
             ->equal("0", Welcome::class)
-            ->equal(9, RegionPageTwoState::class)
+            ->equal('n', RegionPageTwoState::class)
             ->any(Error::class);
     }
 }

@@ -4,7 +4,7 @@ namespace App\Http\Ussd\States;
 
 use Sparors\Ussd\State;
 
-class RegionState extends State
+class RegionPageThreeState extends State
 {
     public $regions = [
         "Ashanti",
@@ -24,14 +24,15 @@ class RegionState extends State
         "Western North",
         "North East"
     ];
+
     protected function beforeRendering(): void
     {
         $this->menu->text("Select your region")
-            ->lineBreak(2)
-            ->paginateListing($this->regions, 1, 6)
-            ->lineBreak()
-            ->line("9. Next Page")
-            ->line("0. Main menu");
+        ->lineBreak(2)
+        ->paginateListing($this->regions, 13, 16)
+        ->lineBreak()
+        ->line("#. Go Back")
+        ->line("0. Main menu");
     }
 
     protected function afterRendering(string $argument): void
@@ -46,7 +47,7 @@ class RegionState extends State
         }
         $this->decision->between(1, 16, GenderState::class)
             ->equal("0", Welcome::class)
-            ->equal(9, RegionPageTwoState::class)
+            ->equal("#", RegionPageTwoState::class)
             ->any(Error::class);
     }
 }

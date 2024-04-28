@@ -53,21 +53,19 @@ class Commodity extends State
 
         if (is_object($cache_record) && strcmp($argument, "0") != 0 && in_array($argument, $range)) {
             $cache_record->commodityName = $commodities[intval($argument) - 1];
-            $cache_record = json_encode($cache_record);
-            $this->record->set($this->record->sessionId, $cache_record);
+            $cache_record_temp = json_encode($cache_record);
+            $this->record->set($this->record->sessionId, $cache_record_temp);
         }
+        
 
         $this->decision->custom(function () use ($cache_record) {
-            // return is_object($cache_record) && strcmp("Withdrawal", $cache_record->transactionType) === 0;
-            return strcmp("Withdrawal", $cache_record->transactionType) === 0;
+            return is_object($cache_record) && strcmp("Withdrawal", $cache_record->transactionType) === 0;
         }, GRN::class)
             ->custom(function () use ($cache_record) {
-                // return is_object($cache_record) && (strcmp("Offtake", $cache_record->transactionType) === 0 || strcmp("Buy Order", $cache_record->transactionType) === 0);
-                return (strcmp("Offtake", $cache_record->transactionType) === 0 || strcmp("Buy Order", $cache_record->transactionType) === 0);
+                return is_object($cache_record) && (strcmp("Offtake", $cache_record->transactionType) === 0 || strcmp("Buy Order", $cache_record->transactionType) === 0);
             }, CommodityUnitPrice::class)
             ->custom(function () use ($cache_record) {
-                // return is_object($cache_record) && strcmp("Storage", $cache_record->transactionType) === 0;
-                return strcmp("Storage", $cache_record->transactionType) === 0;
+                return is_object($cache_record) && strcmp("Storage", $cache_record->transactionType) === 0;
             }, CommodityDuration::class)
             ->equal('0', Welcome::class)
             ->any(Error::class);

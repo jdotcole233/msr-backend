@@ -36,13 +36,14 @@ class Warehouse extends State
         $cache_record = json_decode($this->record->get($this->record->sessionId));
 
         if (is_object($cache_record)) {
-            $range = \range(1, collect($cache_record->warehouses)->pluck('registeredName')->count());
+            $warehouses = collect($cache_record->warehouses)->pluck('registeredName')->all();
+            $range = \range(1, count($warehouses));
         }
 
         info("range ". json_encode($range));
 
         if (in_array($argument, $range) && is_object($cache_record)) {
-            $cache_record->warehouseName = $this->warehouses[intval($argument) - 1];
+            $cache_record->warehouseName = $warehouses[intval($argument) - 1];
             $cache_record_temp = json_encode($cache_record);
             $this->record->set($this->record->sessionId, $cache_record_temp);
         }

@@ -40,8 +40,6 @@ class Warehouse extends State
             $range = \range(1, count($warehouses));
         }
 
-        info("range ". json_encode($range));
-
         if (in_array($argument, $range) && is_object($cache_record)) {
             $cache_record->warehouseName = $warehouses[intval($argument) - 1];
             $cache_record_temp = json_encode($cache_record);

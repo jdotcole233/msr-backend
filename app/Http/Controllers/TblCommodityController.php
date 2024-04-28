@@ -48,7 +48,6 @@ class TblCommodityController extends Controller
      */
     public function show(tblCommodity $commodity)
     {
-        info($commodity);
         return response()->json([
             'data' => $commodity
         ], 200);

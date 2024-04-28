@@ -46,17 +46,12 @@ class Commodity extends State
             $range = \range(1, count($commodities));
         }
 
-        info("commodity range ". json_encode($range));
-        info("cache ". json_encode($cache_record));
-
-
 
         if (is_object($cache_record) && strcmp($argument, "0") != 0 && in_array($argument, $range)) {
             $cache_record->commodityName = $commodities[intval($argument) - 1];
             $cache_record_temp = json_encode($cache_record);
             $this->record->set($this->record->sessionId, $cache_record_temp);
         }
-        
 
         $this->decision->custom(function () use ($cache_record) {
             return is_object($cache_record) && strcmp("Withdrawal", $cache_record->transactionType) === 0;
@@ -69,9 +64,5 @@ class Commodity extends State
             }, CommodityDuration::class)
             ->equal('0', Welcome::class)
             ->any(Error::class);
-
-        // $this->decision->equal('0', Welcome::class)
-        // ->between(1, 6, Warehouse::class)
-        // ->any(Error::class);
     }
 }

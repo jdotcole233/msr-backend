@@ -31,8 +31,6 @@ class TblWarehouseController extends Controller
      */
     public function store(WarehouseRequest $request)
     {
-        info($request->all());
-
         $warehouse = tblWarehouse::create([
             'registeredName' => $request->input('registeredName'),
             'region' => $request->input('region'),

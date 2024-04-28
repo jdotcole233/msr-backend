@@ -35,10 +35,6 @@ Route::prefix('v1/auth')->group(function () {
 Route::post('v1/warehouse', [AuthController::class, 'store']);
 
 Route::post('v1/ussd', function (Request $request) {
-    // session()->setId($request->input('SESSIONID'));
-    // info($request->input('SESSIONID'));
-    // info(session()->getId());
-
     $ussd = Ussd::machine()
         ->setFromRequest([
             'user_id' => 'USERID',

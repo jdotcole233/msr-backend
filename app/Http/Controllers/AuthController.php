@@ -26,7 +26,6 @@ class AuthController extends Controller
         }
 
         $user = $request->user()->load(['operator', 'operator.warehouse']);
-        info($user);
         $token = $user->createToken('Personal Access Token');
         $token = $token->plainTextToken;
 

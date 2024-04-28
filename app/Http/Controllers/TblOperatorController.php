@@ -123,14 +123,9 @@ class TblOperatorController extends Controller
     }
 
     public function setOperatorPassword (Request $request, tblOperator $operator) {
-        info($operator);
-        info($request);
         $userUpdated = $operator->user->update([
             'password' => Hash::make($request->input("password"))
         ]);
-
-        info($operator->user);
-
 
         if (!$userUpdated)
         {

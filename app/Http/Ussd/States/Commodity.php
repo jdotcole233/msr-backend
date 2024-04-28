@@ -40,8 +40,10 @@ class Commodity extends State
     protected function afterRendering(string $argument): void
     {
         $cache_record = json_decode($this->record->get($this->record->sessionId));
-        $range = \range(1, count($this->commodities));
-
+        
+        if (is_object($cache_record)) {
+            $range = \range(1, collect($cache_record->warehouses)->pluck('registeredName')->count());
+        }
         if (is_object($cache_record) && strcmp($argument, "0") != 0 && in_array($argument, $range)) {
             $cache_record->commodityName = $this->commodities[intval($argument) - 1];
             $cache_record = json_encode($cache_record);

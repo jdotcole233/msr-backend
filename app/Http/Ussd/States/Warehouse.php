@@ -34,7 +34,10 @@ class Warehouse extends State
     protected function afterRendering(string $argument): void
     {
         $cache_record = json_decode($this->record->get($this->record->sessionId));
-        $range = \range(1, count($this->warehouses));
+
+        if (is_object($cache_record)) {
+            $range = \range(1, collect($cache_record->warehouses)->pluck('registeredName')->count());
+        }
 
         info("range ". json_encode($range));
 

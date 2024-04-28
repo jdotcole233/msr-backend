@@ -45,6 +45,12 @@ class Commodity extends State
             $commodities = collect($cache_record->warehouses)->pluck('commodityName')->all();
             $range = \range(1, count($commodities));
         }
+
+        info("commodity range ". json_encode($range));
+        info("cache ". json_encode($cache_record));
+
+
+
         if (is_object($cache_record) && strcmp($argument, "0") != 0 && in_array($argument, $range)) {
             $cache_record->commodityName = $commodities[intval($argument) - 1];
             $cache_record = json_encode($cache_record);

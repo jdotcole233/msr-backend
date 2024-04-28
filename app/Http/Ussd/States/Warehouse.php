@@ -14,7 +14,7 @@ class Warehouse extends State
         $cache_record = json_decode($this->record->get($this->record->sessionId));
 
         if (is_object($cache_record)) {
-            $this->warehouses = collect($cache_record->warehouses)->pluck('registeredName');
+            $this->warehouses = collect($cache_record->warehouses)->pluck('registeredName')->all();
         }
 
         if (count($this->warehouses) <= 0) {

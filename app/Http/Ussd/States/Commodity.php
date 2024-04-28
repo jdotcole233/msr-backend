@@ -19,7 +19,8 @@ class Commodity extends State
                 ->where('registeredName', $warehouseName)
                 ->first()
                 ->commodities)
-                ->pluck('commodityName');
+                ->pluck('commodityName')
+                ->all();
         }
 
         if (count($this->commodities) <= 0) {

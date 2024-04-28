@@ -58,13 +58,16 @@ class Commodity extends State
         }
 
         $this->decision->custom(function () use ($cache_record) {
-            return is_object($cache_record) && strcmp("Withdrawal", $cache_record->transactionType) === 0;
+            // return is_object($cache_record) && strcmp("Withdrawal", $cache_record->transactionType) === 0;
+            return strcmp("Withdrawal", $cache_record->transactionType) === 0;
         }, GRN::class)
             ->custom(function () use ($cache_record) {
-                return is_object($cache_record) && (strcmp("Offtake", $cache_record->transactionType) === 0 || strcmp("Buy Order", $cache_record->transactionType) === 0);
+                // return is_object($cache_record) && (strcmp("Offtake", $cache_record->transactionType) === 0 || strcmp("Buy Order", $cache_record->transactionType) === 0);
+                return (strcmp("Offtake", $cache_record->transactionType) === 0 || strcmp("Buy Order", $cache_record->transactionType) === 0);
             }, CommodityUnitPrice::class)
             ->custom(function () use ($cache_record) {
-                return is_object($cache_record) && strcmp("Storage", $cache_record->transactionType) === 0;
+                // return is_object($cache_record) && strcmp("Storage", $cache_record->transactionType) === 0;
+                return strcmp("Storage", $cache_record->transactionType) === 0;
             }, CommodityDuration::class)
             ->equal('0', Welcome::class)
             ->any(Error::class);

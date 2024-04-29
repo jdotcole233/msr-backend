@@ -55,7 +55,7 @@ class TextMessagingJob implements ShouldQueue
                 "grnID" => $this->msrUSSDRequest->getGRNID() ?? "",
                 "unit_price" => $this->msrUSSDRequest->getUnitPrice() ?? "",
             ]),
-            'isComplete' => MsrUtility::UNCOMPLETED,
+            'isComplete' => MsrUtility::$UNCOMPLETED,
         ]);
 
         // Send SMS

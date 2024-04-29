@@ -93,7 +93,7 @@ class TextMessagingJob implements ShouldQueue
         foreach ($operators as $operator) {
             if ($operator->contactPhone) {
                 $message = "Hi " . $operator->operatorName . "\n";
-                $message .= "You recieved a " . $this->msrUSSDRequest->getTransactionType();
+                $message .= $this->msrUSSDRequest->getTransactionType() . " requests received";
                 $this->sendSMS($operator->contactPhone, $message);
             }
         }

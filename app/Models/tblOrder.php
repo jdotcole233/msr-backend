@@ -11,21 +11,28 @@ class tblOrder extends Model
     use HasFactory;
 
     public $fillable = [
-        'user_id', 'fkWarehouseIDNo', 'fkActorID', 'contactPhone',
-        'isBuyOrder', 'transactionType', 'orderDetails', 'isComplete',
-        'status', 'lastUpdatedByName'
+        'user_id',
+        'fkWarehouseIDNo',
+        'fkActorID',
+        'contactPhone',
+        'isBuyOrder',
+        'transactionType',
+        'orderDetails',
+        'isComplete',
+        'status',
+        'lastUpdatedByName'
     ];
-    public function user (): BelongsTo
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
-    public function warehouse () : BelongsTo
+    public function warehouse(): BelongsTo
     {
         return $this->belongsTo(tblWarehouse::class, 'fkWarehouseIDNo', 'warehouseIDNo');
     }
 
-    public function actor () : BelongsTo
+    public function actor(): BelongsTo
     {
         return $this->belongsTo(tblActor::class, 'fkActorID', 'id');
     }

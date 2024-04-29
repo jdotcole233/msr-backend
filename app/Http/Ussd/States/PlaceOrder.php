@@ -20,6 +20,7 @@ class PlaceOrder extends State
 
         if (is_object($cache_record)) {
             $ussdRequest = new MsrUSSDRequest(
+                $cache_record->actor_id,
                 $cache_record->transactionType,
                 $cache_record->warehouseName,
                 $cache_record->commodityName ?? "",

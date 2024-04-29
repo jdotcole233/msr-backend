@@ -6,6 +6,7 @@ class MsrUSSDRequest
 {
 
   public function __construct(
+    private $actorID,
     private $transactionType,
     private $warehouseName,
     private $commodityName,
@@ -19,6 +20,11 @@ class MsrUSSDRequest
    
   }
 
+
+  public function getActorID (): string
+  {
+    return $this->actorID;
+  }
 
   public function getTransactionType (): string
   {

@@ -19,16 +19,19 @@ class Welcome extends State
     {
         // Check if actor exists
         $actor = tblActor::where('contactPhone', $this->record->phoneNumber)->first();
-        $warehouses = tblWarehouse::with(['commodities'])->where('region', $actor->region)->get();
-
         $message = "Welcome to MSR";
-        $this->record->set($this->record->sessionId, json_encode([
-            'actor_id' => $actor->id,
-            'warehouses' => $warehouses
-        ]));
 
         if (!empty($actor)) {
             $message = "Welcome " . $actor->name ?? "to MSR";
+            $warehouses = tblWarehouse::with(['commodities'])->where('region', $actor->region)->get();
+            $this->record->set($this->record->sessionId, json_encode([
+                'actor_id' => $actor->id,
+                'warehouses' => $warehouses
+            ]));
+        }
+        else
+        {
+            $this->record->set($this->record->sessionId, json_encode([]));
         }
 
 

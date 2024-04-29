@@ -23,6 +23,11 @@ class tblWarehouse extends Model
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
+    public function operators () : HasMany
+    {
+        return $this->hasMany(tblOperator::class, 'fkWarehouseIDNo', 'warehouseIDNo');
+    }
+
     public function commodities (): HasMany
     {
         return $this->hasMany(tblCommodity::class, 'fkWarehouseIDNo', 'warehouseIDNo');

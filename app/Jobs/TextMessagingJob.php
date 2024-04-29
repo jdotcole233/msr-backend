@@ -2,7 +2,10 @@
 
 namespace App\Jobs;
 
+use App\Models\tblOrder;
+use App\Models\tblWarehouse;
 use App\Utility\MsrUSSDRequest;
+use App\Utility\MsrUtility;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -33,6 +36,27 @@ class TextMessagingJob implements ShouldQueue
     {
 
         // Store in database
+        $warehouse = tblWarehouse::with(['operators'])->where('registeredName', $this->msrUSSDRequest->getWarehouseName())
+            ->first();
+
+        info("warehouse ". json_encode($warehouse));
+
+        tblOrder::create([
+            'fkWarehouseIDNo' => $warehouse->warehouseIDNo,
+            'fkActorID' => $this->msrUSSDRequest->getActorID(),
+            'contactPhone' => $this->msrUSSDRequest->getPhoneNumber(),
+            'isBuyOrder' => strcmp('Buy Order', $this->msrUSSDRequest->getTransactionType()) == 0,
+            'transactionType' => strtoupper($this->msrUSSDRequest->getTransactionType()),
+            'orderDetails' => json_encode([
+                "duration" => $this->msrUSSDRequest->getDuration() ?? "",
+                "quantity" => $this->msrUSSDRequest->getQuantity() ?? "",
+                "package_size" => $this->msrUSSDRequest->getPackageSize() ?? "",
+                "commodityName" => $this->msrUSSDRequest->getCommodityName() ?? "",
+                "grnID" => $this->msrUSSDRequest->getGRNID() ?? "",
+                "unit_price" => $this->msrUSSDRequest->getUnitPrice() ?? "",
+            ]),
+            'isComplete' => MsrUtility::UNCOMPLETED,
+        ]);
 
         // Send SMS
         $message = "Details of your " . $this->msrUSSDRequest->getTransactionType() . " request:";
@@ -50,21 +74,41 @@ class TextMessagingJob implements ShouldQueue
         $message .= "\nAn operator from " . $this->msrUSSDRequest->getWarehouseName() . " will contact you soon";
         $message .= "\nThank you";
 
-        $request = Http::post(config('app.sms_endpoint'), [
-            'key' => config('app.sms_key'),
-            'msisdn' => $this->msrUSSDRequest->getPhoneNumber(),
-            'message' => $message,
-            'sender_id' => config('app.sms_userid')
-        ]);
+        $this->sendSMS($this->msrUSSDRequest->getPhoneNumber(), $message);
+        $this->operatorMessage($warehouse);
 
-        info("SMS " . json_encode($request->body()));
     }
 
-    private function outputMessage ($message) : string
+    private function outputMessage($message): string
     {
         $message .= "\nCommoidity: " . $this->msrUSSDRequest->getCommodityName();
         $message .= "\nQuantity: " . $this->msrUSSDRequest->getQuantity();
         $message .= "\nSize : " . $this->msrUSSDRequest->getPackageSize();
         return $message;
+    }
+
+    private function operatorMessage($warehouse)
+    {
+        $operators = $warehouse->operators ?? [];
+        foreach ($operators as $operator) {
+            if ($operator->contactPhone) {
+                $message = "Hi " . $operator->operatorName . "\n";
+                $message .= "You recieved a " . $this->msrUSSDRequest->getTransactionType();
+                $this->sendSMS($operator->contactPhone, $message);
+            }
+        }
+
+    }
+
+    private function sendSMS($numbers, $message)
+    {
+        $request = Http::post(config('app.sms_endpoint'), [
+            'key' => config('app.sms_key'),
+            'msisdn' => $numbers,
+            'message' => $message,
+            'sender_id' => config('app.sms_userid')
+        ]);
+
+        info("SMS " . json_encode($request->body()));
     }
 }

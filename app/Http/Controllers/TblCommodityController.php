@@ -17,7 +17,7 @@ class TblCommodityController extends Controller
     public function index()
     {
         return response()->json([
-            'data' => tblCommodity::latest()->paginate(5),
+            'data' => tblCommodity::where('fkWarehouseIDNo', Auth::user()->load(['operator'])->operator->fkWarehouseIDNo)->latest()->paginate(5),
         ], 200);
     }
 

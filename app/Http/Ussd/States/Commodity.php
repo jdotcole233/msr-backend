@@ -42,13 +42,19 @@ class Commodity extends State
         $cache_record = json_decode($this->record->get($this->record->sessionId));
 
         if (is_object($cache_record)) {
-            $commodities = collect($cache_record->warehouses)->pluck('commodityName')->all();
-            $range = \range(1, count($commodities));
+            // $commodities = collect($cache_record->warehouses)->pluck('commodityName')->all();
+            $this->commodities = collect(collect($cache_record->warehouses)
+                ->where('registeredName', $cache_record->warehouseName)
+                ->first()
+                ->commodities)
+                ->pluck('commodityName')
+                ->all();
+            $range = \range(1, count($this->commodities ));
         }
 
 
         if (is_object($cache_record) && strcmp($argument, "0") != 0 && in_array($argument, $range)) {
-            $cache_record->commodityName = $commodities[intval($argument) - 1];
+            $cache_record->commodityName = $this->commodities [intval($argument) - 1];
             $cache_record_temp = json_encode($cache_record);
             $this->record->set($this->record->sessionId, $cache_record_temp);
         }

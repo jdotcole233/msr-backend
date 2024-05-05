@@ -4,6 +4,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TblActorController;
 use App\Http\Controllers\TblCommodityController;
 use App\Http\Controllers\TblFeeController;
+use App\Http\Controllers\TblGINController;
+use App\Http\Controllers\TblGRNController;
 use App\Http\Controllers\TblOperatorController;
 use App\Http\Controllers\TblWarehouseController;
 use App\Http\Controllers\TblOrderController;
@@ -68,14 +70,31 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::apiResource('commodities', TblCommodityController::class);
         Route::apiResource('fees', TblFeeController::class);
         Route::apiResource('operator', TblOperatorController::class);
+        Route::apiResource('process-goods-received', TblGRNController::class);
+
+        Route::apiResource('goods-issued-note', TblGINController::class);
+
+        Route::post('good-issued', [TblGINController::class, 'goodIssued']);
+        Route::get('goods-to-be-processed', [TblOrderController::class, 'goodsToBeProcessed']);
+        Route::get('goods-for-storage', [TblOrderController::class, 'goodsForStorage']);
+        Route::get('goods-bought', [TblOrderController::class, 'goodsBought']);
+        Route::get('grn-processed', [TblOrderController::class, 'grnProcessed']);
+        Route::get('gin-processed', [TblOrderController::class, 'ginProcessed']);
+        Route::get('stock-on-hand', [TblOrderController::class, 'stockOnHand']);
+    
+
+        // Route::post('process-withdrawal', [TblOrderController::class, 'processWithdrawal']);
 
         Route::apiResource('actor', TblActorController::class);
 
         Route::get('storage', [TblOrderController::class, 'storage']);
         Route::get('withdrawal', [TblOrderController::class, 'withdrawal']);
+        Route::get('withdrawn', [TblOrderController::class, 'withdrawn']);
         Route::get('off-take', [TblOrderController::class, 'offtake']);
 
         Route::put('resetpassword/{user}', [TblOperatorController::class, 'resetOperatorPassword']);
         Route::put('setpassword/{operator}', [TblOperatorController::class, 'setOperatorPassword']);
+
+        Route::put('orderStatus/{order}', [TblOrderController::class, 'orderState']);
     });
 });

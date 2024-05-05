@@ -13,7 +13,7 @@ class tblGIN extends Model
     public $fillable = [
         'user_id', 'fkWarehouseIDNo', 'fkActorID', 'fktblWHCommoditiesID',
         'dateIssued', 'noBagsIssued', 'weightPerBag', 'pricePerBag', 'status',
-        'lastUpdatedByName'
+        'lastUpdatedByName', 'ginidno'
     ];
 
     public function actor (): BelongsTo

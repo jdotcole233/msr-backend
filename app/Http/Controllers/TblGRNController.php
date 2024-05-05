@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\tblGRNRequest;
 use App\Models\tblGRN;
+use App\Models\tblInventory;
+use App\Models\tblOrder;
+use App\Utility\MsrUtility;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class TblGRNController extends Controller
 {
@@ -33,9 +38,45 @@ class TblGRNController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(tblGRNRequest $request)
     {
-        //
+        $operator = $request->user()->load('operator')->operator;
+
+        info(json_encode($request->all()));
+
+        $order = tblOrder::where('id', $request->input('requestID'))->update([
+            'iscomplete' => MsrUtility::$COMPLETED,
+            'lastUpdatedByName' => $operator->operatorName,
+        ]);
+
+        $data = tblGRN::create($request->all() + [
+            'user_id' => $request->user()->id,
+            'fkWarehouseIDNo' => $operator->fkWarehouseIDNo,
+            'lastUpdatedByName' => $operator->operatorName,
+            'grnidno' => Str::upper(Str::random(10)),
+        ]);
+
+        $inventoryInstance = tblInventory::where('fktblWHCommoditiesID', $request->input('fktblWHCommoditiesID'))->first();
+
+        if ($inventoryInstance) {
+            $lastQuantity = $inventoryInstance->totalReceived;
+            $lastQuantity = $lastQuantity + floatval($request->input('noBagsReceived'));
+            $inventoryInstance->update(['totalReceived' => $lastQuantity]);
+        } else {
+            tblInventory::create([
+                'fkWarehouseIDNo' => $request->user()->load(['operator'])->operator->fkWarehouseIDNo, 
+                'fktblWHCommoditiesID' => $request->input('fktblWHCommoditiesID'),
+                'totalReceived' => $request->input('noBagsReceived'), 
+                'totalIssued' => 0,
+            ]);
+        }
+
+        
+
+        return response()->json([
+            'data' => $data,
+            'message' => 'Goods processed successfully.'
+        ]);
     }
 
     /**

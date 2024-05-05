@@ -81,7 +81,7 @@ class TextMessagingJob implements ShouldQueue
 
     private function outputMessage($message): string
     {
-        $message .= "\nCommoidity: " . $this->msrUSSDRequest->getCommodityName();
+        $message .= "\nCommodity: " . $this->msrUSSDRequest->getCommodityName();
         $message .= "\nQuantity: " . $this->msrUSSDRequest->getQuantity();
         $message .= "\nSize : " . $this->msrUSSDRequest->getPackageSize();
         return $message;

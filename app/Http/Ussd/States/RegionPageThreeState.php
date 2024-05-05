@@ -9,6 +9,7 @@ class RegionPageThreeState extends State
     public $regions = [
         "Oti",
         "Ahafo",
+        "Bono",
         "Western North",
         "North East"
     ];

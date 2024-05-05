@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\OperatorRequest;
 use App\Http\Requests\OperatorUpdateRequest;
+use App\Jobs\OperatorOnboardedJob;
 use App\Models\tblOperator;
-use App\Models\tblWarehouse;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -37,27 +37,33 @@ class TblOperatorController extends Controller
     {
         $grant_access = $request->input('grant_access');
         $random_password = Str::random(9);
+        $password = Hash::make($random_password);
 
         $operator = tblOperator::create([
             'user_id' => Auth::user()->id,
-            'contactPhone' => $request->input('phonenumber'),
+            'contactPhone' => $request->input('contactPhone'),
             'isMale' => strcmp($request->input('gender'), 'Male') == 0,
             'ageGroup' => $request->input('ageGroup'),
-            'operatorName' => $request->input('firstName') . " " . $request->input('lastName'),
-            'fkWarehouseIDNo' => $request->input('fkWarehouseIDNo') ,
+            'operatorName' => $request->input('operatorName'),
+            'fkWarehouseIDNo' => $request->input('fkWarehouseIDNo'),
             'isOwner' => $request->input('is_owner')
         ]);
 
         if ($grant_access) {
             $user = User::create([
                 'operator_id' => $operator->id,
-                'phonenumber' => $request->input('phonenumber'),
-                'password' => Hash::make($random_password),
+                'phonenumber' => $request->input('contactPhone'),
+                'password' => $password,
             ]);
 
-            if ($user)
-            {
+            if ($user) {
                 //Dispatch SMS Job
+                $operator = new OperatorOnboardedJob(
+                    $request->input('contactPhone'),
+                    $request->input('operatorName'),
+                    $random_password
+                );
+                dispatch($operator);
             }
         }
 
@@ -65,7 +71,7 @@ class TblOperatorController extends Controller
             'message' => 'Created successfully',
             'data' => $operator
         ], 201);
-        
+
     }
 
     /**
@@ -95,16 +101,15 @@ class TblOperatorController extends Controller
             'lastUpdatedByName' => Auth::user()->load(['operator'])->operator->operatorName,
         ]);
 
-        if (!$operator)
-        {
+        if (!$operator) {
             return response()->json([
                 'message' => 'Update failed',
-            ], 204);  
+            ], 204);
         }
 
         return response()->json([
             'message' => 'Updated successfully',
-        ], 200);   
+        ], 200);
     }
 
     /**
@@ -122,13 +127,13 @@ class TblOperatorController extends Controller
         ], 204);
     }
 
-    public function setOperatorPassword (Request $request, tblOperator $operator) {
+    public function setOperatorPassword(Request $request, tblOperator $operator)
+    {
         $userUpdated = $operator->user->update([
             'password' => Hash::make($request->input("password"))
         ]);
 
-        if (!$userUpdated)
-        {
+        if (!$userUpdated) {
             return response()->json([
                 'message' => 'Setting password failed. Contact admin'
             ], 200);
@@ -143,15 +148,14 @@ class TblOperatorController extends Controller
     }
 
 
-    public function resetOperatorPassword (User $user)
+    public function resetOperatorPassword(User $user)
     {
         $generate_password = Str::random(9);
         $userUpdated = $user->update([
             'password' => Hash::make($generate_password)
         ]);
 
-        if (!$userUpdated)
-        {
+        if (!$userUpdated) {
             return response()->json([
                 'message' => 'Reset failed'
             ], 200);

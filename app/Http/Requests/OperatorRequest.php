@@ -24,9 +24,8 @@ class OperatorRequest extends FormRequest
     public function rules()
     {
         return [
-            'firstName' => 'required|string|max:255',
-            'lastName' => 'required|string|max:255',
-            'phonenumber' => 'required',
+            'operatorName' => 'required|string|max:255',
+            'contactPhone' => 'required',
             'ageGroup' => 'required',
             'gender' => 'required',
             'is_owner' => 'required',

@@ -29,7 +29,8 @@ class PlaceOrder extends State
                 $cache_record->quantity ?? "",
                 $cache_record->package_size ?? "",
                 $cache_record->grnID ?? "",
-                $this->record->phoneNumber
+                $this->record->phoneNumber,
+                $this->record->harvest_type,
             );
 
             $textMessaging = new TextMessagingJob($ussdRequest);

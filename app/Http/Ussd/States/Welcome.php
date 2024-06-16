@@ -2,6 +2,7 @@
 
 namespace App\Http\Ussd\States;
 
+use App\Http\Ussd\States\Registration\RegionState;
 use App\Models\tblActor;
 use App\Models\tblWarehouse;
 use Illuminate\Http\Request;
@@ -11,7 +12,7 @@ use Sparors\Ussd\State;
 class Welcome extends State
 {
 
-    private $transactionTypes = ['Storage', 'Offtake', 'Buy Order', 'Withdrawal'];
+    private $transactionTypes = ['Storage', 'Sell Offer', 'Buy Order', 'Withdraw', 'Warehouse Info'];
     // protected $actor
 
 
@@ -71,7 +72,7 @@ class Welcome extends State
             }
 
             $this->decision->between(1, 4, Warehouse::class)
-                // ->equal('4', Warehouse::class)
+                ->equal(5, WarehouseInformationState::class)
                 ->any(Error::class);
         }
     }

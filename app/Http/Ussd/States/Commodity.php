@@ -2,6 +2,8 @@
 
 namespace App\Http\Ussd\States;
 
+use App\Http\Ussd\States\Buyorder\PackageSizeBuyOrderState;
+use App\Http\Ussd\States\Selloffer\SellOfferPackageSizeState;
 use Sparors\Ussd\State;
 
 class Commodity extends State
@@ -63,11 +65,14 @@ class Commodity extends State
             return is_object($cache_record) && strcmp("Withdrawal", $cache_record->transactionType) === 0;
         }, GRN::class)
             ->custom(function () use ($cache_record) {
-                return is_object($cache_record) && (strcmp("Offtake", $cache_record->transactionType) === 0 || strcmp("Buy Order", $cache_record->transactionType) === 0);
-            }, CommodityUnitPrice::class)
+                return is_object($cache_record) && strcmp("Sell Offer", $cache_record->transactionType) === 0;
+            }, SellOfferPackageSizeState::class) //CommodityUnitPrice
+            ->custom(function () use ($cache_record) {
+                return is_object($cache_record) && strcmp("Buy Order", $cache_record->transactionType) === 0;
+            }, PackageSizeBuyOrderState::class)
             ->custom(function () use ($cache_record) {
                 return is_object($cache_record) && strcmp("Storage", $cache_record->transactionType) === 0;
-            }, CommodityDuration::class)
+            }, PackageSize::class) //CommodityDuration
             ->equal('0', Welcome::class)
             ->any(Error::class);
     }

@@ -15,7 +15,7 @@ class tblWarehouse extends Model
         'townCity', 'district', 'ghPostAddress', 'GPSLat', 'GPSLong',
         'yearEstablished', 'businessType', 'storageCapacity', 'offersCleaning',
         'offersRebagging', 'mainContactName', 'mainContactIsMale', 'mainContactPosition',
-        'mainContactTel', 'mainContactEmail', 'declarationAccepted', 'status', 'lastUpdatedByName',
+        'mainContactTel', 'mainContactEmail', 'declarationAccepted', 'ghanaCard', 'status', 'lastUpdatedByName',
     ];
 
     public function user (): BelongsTo

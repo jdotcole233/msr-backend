@@ -54,6 +54,7 @@ class TextMessagingJob implements ShouldQueue
                 "commodityName" => $this->msrUSSDRequest->getCommodityName() ?? "",
                 "grnID" => $this->msrUSSDRequest->getGRNID() ?? "",
                 "unit_price" => $this->msrUSSDRequest->getUnitPrice() ?? "",
+                'harvest_type' => $this->msrUSSDRequest->getHarvestType() ?? ""
             ]),
             'isComplete' => MsrUtility::$UNCOMPLETED,
         ]);

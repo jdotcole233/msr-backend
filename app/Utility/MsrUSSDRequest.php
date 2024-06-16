@@ -15,11 +15,16 @@ class MsrUSSDRequest
     private $quantity,
     private $package_size,
     private $grn_id,
-    private $phoneNumber
+    private $phoneNumber,
+    private $harvestType,
   ) {
    
   }
 
+  public function getHarvestType(): string
+  {
+    return $this->harvestType;
+  }
 
   public function getActorID (): string
   {

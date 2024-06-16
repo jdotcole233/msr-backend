@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\OrderNotificationJob;
 use App\Models\tblGIN;
 use App\Models\tblGRN;
 use App\Models\tblInventory;
@@ -22,6 +23,13 @@ class TblOrderController extends Controller
     }
 
 
+    public function buyOrder() {
+        return response()->json([
+            'data' => $this->getOrder('BUY ORDER')
+        ], 200);
+    }
+
+
     public function withdrawn()
     {
         $warehouseIDNo = Auth::user()->load(['operator'])->operator->fkWarehouseIDNo;
@@ -37,6 +45,25 @@ class TblOrderController extends Controller
         ], 200);
     }
 
+
+    public function qualityAssessment()
+    {
+        $warehouseIDNo = Auth::user()->load(['operator'])->operator->fkWarehouseIDNo;
+        $request = tblOrder::with(['actor', 'warehouse'])
+            ->where('fkWarehouseIDNo', $warehouseIDNo)
+            ->whereIn('transactionType', ['STORAGE', 'OFFTAKE'])
+            ->where(function ($query) {
+                $query->where('isComplete', MsrUtility::$UNCOMPLETED);
+                    // ->orWhereNull('isComplete');
+            })
+            ->paginate(5);
+
+        return response()->json([
+            'data' => $request
+        ], 200);
+    }
+
+
     public function goodsToBeProcessed()
     {
         $warehouseIDNo = Auth::user()->load(['operator'])->operator->fkWarehouseIDNo;
@@ -44,8 +71,8 @@ class TblOrderController extends Controller
             ->where('fkWarehouseIDNo', $warehouseIDNo)
             ->whereIn('transactionType', ['STORAGE', 'OFFTAKE'])
             ->where(function ($query) {
-                $query->where('isComplete', MsrUtility::$UNCOMPLETED)
-                    ->orWhereNull('isComplete');
+                $query->where('isComplete', MsrUtility::$COMPLETED);
+                    // ->orWhereNull('isComplete');
             })
             ->paginate(5);
 
@@ -148,7 +175,8 @@ class TblOrderController extends Controller
             'status' => strcmp($request->input('status'), 'ACCEPTED') === 0
                 ? MsrUtility::$STATUS_ACCEPTED
                 : MsrUtility::$STATUS_DECLINED,
-            'lastUpdatedByName' => Auth::user()->load(['operator'])->operator->operatorName
+            'lastUpdatedByName' => Auth::user()->load(['operator'])->operator->operatorName,
+            'isComplete' =>  in_array($order->transactionType, ['STORAGE', 'OFFTAKE'])  ? MsrUtility::$UNCOMPLETED : null
         ]);
 
         if (!$orderState) {
@@ -157,6 +185,7 @@ class TblOrderController extends Controller
             ], 200);
         }
 
+        // dispatch(new OrderNotificationJob($order));
 
         return response()->json([
             'data' => $request->input('status')

@@ -21,7 +21,16 @@ class CommodityUnitPrice extends State
 
         }
 
-        $this->decision->numeric(PackageSize::class)
+        // is_object($cache_record) && (strcmp("Sell Offer", $cache_record->transactionType) === 0
+
+        $this->decision
+        // ->custom(function () use ($cache_record) {
+        //     return is_object($cache_record) && (strcmp("Sell Offer", $cache_record->transactionType) === 0);
+        // }, SellOfferPackageSizeState::class)
+        //     ->custom(function () use ($cache_record) {
+        //         return is_object($cache_record) && (strcmp("Storage", $cache_record->transactionType) === 0);
+        //     }, PackageSize::class)
+            ->numeric(PackageSize::class)
             ->any(Error::class);
     }
 }

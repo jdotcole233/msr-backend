@@ -39,7 +39,7 @@ class OperatorOnboardedJob implements ShouldQueue
         $message .= "Your account on msr platform has been setup successfully\n";
         $message .= "This is your first time password\n";
         $message .= "Password: " . $this->password . "\n";
-        $message .= "Login here: http://usaidmsractivityghana.org/". 
+        $message .= "Login here: https://usaidmsractivityghana.org/". 
         $message .= "\n. Please change your password when you first log in";
 
         $this->sendSMS($this->numbers, $message);

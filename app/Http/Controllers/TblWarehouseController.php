@@ -39,6 +39,9 @@ class TblWarehouseController extends Controller
             'businessType' => $request->input('businessType'),
             'storageCapacity' => $request->input('storageCapacity'),
             'warehouseIDNo' => Str::upper(Str::random(6)),
+            'ghanaCard' => $request->input('ghanaCard'),
+            'GPSLat' => $request->input("GPSLat"),
+            'GPSLong' => $request->input("GPSLong"),
         ]);
 
         $operator = tblOperator::create([

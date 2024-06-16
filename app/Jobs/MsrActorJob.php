@@ -42,7 +42,9 @@ class MsrActorJob implements ShouldQueue
             'name' => $name,
             'contactPhone' => $this->msrActor->getPhoneNumber(),
             'isMale' => strcmp($this->msrActor->getGender(), 'Male') === 0,
-            'region' => $this->msrActor->getRegion()
+            'region' => $this->msrActor->getRegion(),
+            'ghana_card' => $this->msrActor->getGhanaCard(),
+            'age' => $this->msrActor->getAge()
         ]);
 
         $request = Http::post(config('app.sms_endpoint'), [

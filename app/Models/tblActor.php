@@ -12,7 +12,7 @@ class tblActor extends Model
 
     public $fillable = [
         'user_id', 'name', 'contactPhone', 'ageGroup',
-        'isMale', 'region', 'townCity', 'district',
+        'isMale', 'region', 'townCity', 'district', 'age', 'ghana_card',
         'status', 'lastUpdatedByName'
     ];
 }

@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Http\Ussd\States;
+namespace App\Http\Ussd\States\Storage;
 
 use Sparors\Ussd\State;
+use App\Http\Ussd\States\Error;
+
 
 class PackageSize extends State
 {

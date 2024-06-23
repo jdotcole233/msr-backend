@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Http\Ussd\States;
+namespace App\Http\Ussd\States\Storage;
 
+use App\Http\Ussd\States\PlaceOrder;
 use Sparors\Ussd\State;
+use App\Http\Ussd\States\Error;
 
 class HarvestTypeState extends State
 {

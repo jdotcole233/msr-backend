@@ -2,6 +2,7 @@
 
 namespace App\Http\Ussd\States;
 
+use App\Http\Ussd\States\Storage\PackageSize;
 use Sparors\Ussd\State;
 
 class CommodityUnitPrice extends State

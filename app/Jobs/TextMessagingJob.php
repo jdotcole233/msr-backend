@@ -25,6 +25,7 @@ class TextMessagingJob implements ShouldQueue
      */
     public function __construct(private MsrUSSDRequest $msrUSSDRequest)
     {
+        info("Messaging ". json_encode($msrUSSDRequest));
     }
 
     /**

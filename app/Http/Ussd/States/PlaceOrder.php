@@ -33,6 +33,8 @@ class PlaceOrder extends State
                 $this->record->harvest_type,
             );
 
+            info("Request MSR ". json_encode($ussdRequest));
+
             $textMessaging = new TextMessagingJob($ussdRequest);
             dispatch($textMessaging);
         }

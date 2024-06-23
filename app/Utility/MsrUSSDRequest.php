@@ -16,7 +16,7 @@ class MsrUSSDRequest
     private $package_size,
     private $grn_id,
     private $phoneNumber,
-    private $harvestType,
+    private $harvestType
   ) {
    
   }

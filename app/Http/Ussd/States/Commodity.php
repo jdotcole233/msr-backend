@@ -45,6 +45,9 @@ class Commodity extends State
     {
         $cache_record = json_decode($this->record->get($this->record->sessionId));
 
+        info("commodity cache ". json_encode($cache_record));
+        info("commodity argument ". json_encode($cache_record));
+
         if (is_object($cache_record)) {
             // $commodities = collect($cache_record->warehouses)->pluck('commodityName')->all();
             $this->commodities = collect(collect($cache_record->warehouses)
@@ -68,13 +71,13 @@ class Commodity extends State
         }, GRN::class)
             ->custom(function () use ($cache_record) {
                 return is_object($cache_record) && strcmp("Sell Offer", $cache_record->transactionType) === 0;
-            }, SellOfferPackageSizeState::class) //CommodityUnitPrice
+            }, SellOfferPackageSizeState::class)
             ->custom(function () use ($cache_record) {
                 return is_object($cache_record) && strcmp("Buy Order", $cache_record->transactionType) === 0;
             }, PackageSizeBuyOrderState::class)
             ->custom(function () use ($cache_record) {
                 return is_object($cache_record) && strcmp("Storage", $cache_record->transactionType) === 0;
-            }, PackageSize::class) //CommodityDuration
+            }, PackageSize::class) 
             ->equal('0', Welcome::class)
             ->any(Error::class);
     }

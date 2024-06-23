@@ -1,22 +1,19 @@
 <?php
 
-namespace App\Http\Ussd\States\Regions;
+namespace App\Http\Ussd\States;
 
-use App\Http\Ussd\States\Warehouse;
 use App\Http\Ussd\States\Welcome;
-use App\Models\tblWarehouse;
 use Sparors\Ussd\State;
 use App\Http\Ussd\States\Error;
 
-class RegionTrnsactionTwo extends State
+class RegionPageThreeState extends State
 {
     public $regions = [
-        "Northern",
-        "Upper East",
-        "Upper West",
-        "Volta",
-        "Western",
-        "Savannah"
+        "Oti",
+        "Ahafo",
+        "Bono",
+        "Western North",
+        "North East"
     ];
 
     protected function beforeRendering(): void
@@ -25,7 +22,6 @@ class RegionTrnsactionTwo extends State
         ->lineBreak(2)
         ->listing($this->regions)
         ->lineBreak(2)
-        ->line("n. Next Page")
         ->line("#. Go Back")
         ->line("0. Main menu");
     }
@@ -34,17 +30,15 @@ class RegionTrnsactionTwo extends State
     {
         $cache_record = json_decode($this->record->get($this->record->sessionId));
         
-        if (is_object($cache_record) && intval($argument) >= 1 && intval($argument) <= 6) {
+        if (is_object($cache_record) && (intval($argument) >= 1 && intval($argument) <= 5)) {
             $cache_record->region = $this->regions[intval($argument) - 1];
             $cache_record->phoneNumer = $this->record->phoneNumber;
-            $cache_record->warehouses = tblWarehouse::with(['commodities'])->where('region', $this->regions[intval($argument) - 1])->get();
             $cache_record = json_encode($cache_record);
             $this->record->set($this->record->sessionId, $cache_record);
         }
-        $this->decision->between(1, 6, Warehouse::class)
+        $this->decision->between(1, 5, GenderState::class)
             ->equal("0", Welcome::class)
-            ->equal("#", RegionTrnsaction::class)
-            ->equal('n', RegionTrnsactionThree::class)
+            ->equal("#", RegionPageTwoState::class)
             ->any(Error::class);
     }
 }

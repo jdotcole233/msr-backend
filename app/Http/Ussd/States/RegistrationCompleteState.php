@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Ussd\States\Registration;
+namespace App\Http\Ussd\States;
 use App\Jobs\MsrActorJob;
 use App\Utility\MsrActor;
 

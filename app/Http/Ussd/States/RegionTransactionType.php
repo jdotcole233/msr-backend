@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Ussd\States\Regions;
+namespace App\Http\Ussd\States;
 
 use Sparors\Ussd\State;
 use App\Http\Ussd\States\Error;

@@ -46,7 +46,7 @@ class Commodity extends State
         $cache_record = json_decode($this->record->get($this->record->sessionId));
 
         info("commodity cache ". json_encode($cache_record));
-        info("commodity argument ". json_encode($cache_record));
+        info("commodity argument ". json_encode($argument));
 
         if (is_object($cache_record)) {
             // $commodities = collect($cache_record->warehouses)->pluck('commodityName')->all();

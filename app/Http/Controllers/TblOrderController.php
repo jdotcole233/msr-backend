@@ -11,6 +11,7 @@ use App\Models\tblWarehouse;
 use App\Utility\MsrUtility;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class TblOrderController extends Controller
 {
@@ -35,9 +36,9 @@ class TblOrderController extends Controller
         $warehouseIDNo = Auth::user()->load(['operator'])->operator->fkWarehouseIDNo;
         $request = tblOrder::with(['actor', 'warehouse'])->where('fkWarehouseIDNo', $warehouseIDNo)
             ->where('transactionType', "WITHDRAWAL")
-            ->WhereNull('status')
-            ->orWhere('status', MsrUtility::$STATUS_ACCEPTED)
-            ->where('isComplete', MsrUtility::$COMPLETED)
+            // ->WhereNull('status')
+            ->Where('status', MsrUtility::$STATUS_ACCEPTED)
+            // ->where('isComplete', MsrUtility::$COMPLETED)
             ->paginate(5);
 
         return response()->json([
@@ -67,12 +68,15 @@ class TblOrderController extends Controller
     public function goodsToBeProcessed()
     {
         $warehouseIDNo = Auth::user()->load(['operator'])->operator->fkWarehouseIDNo;
-        $request = tblOrder::with(['actor', 'warehouse'])
+        $request = tblOrder::with(['actor', 'warehouse', 'grn'])
             ->where('fkWarehouseIDNo', $warehouseIDNo)
             ->whereIn('transactionType', ['STORAGE', 'OFFTAKE'])
             ->where(function ($query) {
                 $query->where('isComplete', MsrUtility::$COMPLETED);
                     // ->orWhereNull('isComplete');
+            })
+            ->whereHas('grn', function ($query) {
+                $query->whereNull('dateReceived');
             })
             ->paginate(5);
 
@@ -85,11 +89,17 @@ class TblOrderController extends Controller
     public function goodsForStorage()
     {
         $warehouseIDNo = Auth::user()->load(['operator'])->operator->fkWarehouseIDNo;
-        $request = tblOrder::with(['actor', 'warehouse'])
+        $request = tblOrder::with(['actor', 'warehouse', 'grn'])
             ->where('fkWarehouseIDNo', $warehouseIDNo)
             ->where('transactionType', 'STORAGE')
             ->where('isComplete', MsrUtility::$COMPLETED)
+            ->where('status', MsrUtility::$STATUS_ACCEPTED)
+            ->whereHas('grn', function ($query) {
+                $query->whereNotNull('dateReceived');
+            })
             ->paginate(5);
+
+        info("data ". json_encode($request));
 
         return response()->json([
             'data' => $request
@@ -99,10 +109,14 @@ class TblOrderController extends Controller
     public function goodsBought()
     {
         $warehouseIDNo = Auth::user()->load(['operator'])->operator->fkWarehouseIDNo;
-        $request = tblOrder::with(['actor', 'warehouse'])
+        $request = tblOrder::with(['actor', 'warehouse', 'grn'])
             ->where('fkWarehouseIDNo', $warehouseIDNo)
             ->where('transactionType', 'OFFTAKE')
             ->where('isComplete', MsrUtility::$COMPLETED)
+            ->where('status', MsrUtility::$STATUS_ACCEPTED)
+            ->whereHas('grn', function ($query) {
+                $query->whereNotNull('dateReceived');
+            })
             ->paginate(5);
 
         return response()->json([
@@ -140,8 +154,10 @@ class TblOrderController extends Controller
         $warehouseIDNo = Auth::user()->load(['operator'])->operator->fkWarehouseIDNo;
         $request = tblOrder::with(['actor', 'warehouse'])->where('fkWarehouseIDNo', $warehouseIDNo)
             ->where('transactionType', "WITHDRAWAL")
-            ->where('isComplete', MsrUtility::$UNCOMPLETED)
-            ->WhereIn('status', [null, MsrUtility::$STATUS_ACCEPTED])
+            ->whereNull('isComplete')
+            ->whereNull('status')
+            // ->where('isComplete', MsrUtility::$UNCOMPLETED)
+            // ->WhereIn('status', [null, MsrUtility::$STATUS_ACCEPTED])
             ->paginate(5);
 
         return response()->json([
@@ -192,4 +208,37 @@ class TblOrderController extends Controller
         ], 200);
     }
 
+
+    public function qualityAssessmentUpdate(Request $request, tblOrder $order) {
+        $user = $request->user()->load('operator');
+        $data = tblGRN::create([
+            'user_id' => $user->id,
+            'fkWarehouseIDNo' => $user->operator->fkWarehouseIDNo,
+            'lastUpdatedByName' => $user->operator->operatorName,
+            'grnidno' => Str::upper(Str::random(10)),
+            'assessment' => $request->input("assessment"),
+            'fkOrderId' => $order->id,
+            'fkActorID' => $order->fkActorID,
+            'fktblWHCommoditiesID' => json_decode($order->orderDetails)->commodityId
+        ]);
+
+        $order->update([
+            'isComplete' => MsrUtility::$COMPLETED,
+            'lastUpdatedByName' => $user->operator->operatorName
+        ]);
+
+        if (!$data) {
+            return response()->json([
+                'message' => 'Quality Assessment failed...'
+            ], 200);
+        }
+
+        // dispatch(new OrderNotificationJob($order));
+
+        return response()->json([
+            'data' => [
+                'message' => "Assessment completed successfully..."
+            ]
+        ], 200);
+    }
 }

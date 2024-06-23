@@ -22,7 +22,7 @@ class CreateTblCommoditiesTable extends Migration
             // $table->foreign('fkWarehouseIDNo')->references('warehouseIDNo')
             // ->on('tbl_warehouses')->cascadeOnDelete();
             $table->string('commodityName')->nullable();
-            $table->double('packingSize')->nullable();
+            $table->string('packingSize', 255)->nullable()->change();
             $table->integer('status')->nullable();
             $table->string('lastUpdatedByName')->nullable();
             $table->timestamps();

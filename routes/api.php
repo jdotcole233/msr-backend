@@ -13,6 +13,7 @@ use App\Http\Ussd\States\Welcome;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Sparors\Ussd\Facades\Ussd;
+use App\Http\Controllers\Controller;
 
 /*
 |--------------------------------------------------------------------------
@@ -83,6 +84,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('grn-processed', [TblOrderController::class, 'grnProcessed']);
         Route::get('gin-processed', [TblOrderController::class, 'ginProcessed']);
         Route::get('stock-on-hand', [TblOrderController::class, 'stockOnHand']);
+        Route::put('quality-assessment/{order}', [TblOrderController::class, 'qualityAssessmentUpdate']);
+
+        Route::get('warehouse-dashboard-stats', [Controller::class, 'getDashboardStats']);
     
 
         // Route::post('process-withdrawal', [TblOrderController::class, 'processWithdrawal']);

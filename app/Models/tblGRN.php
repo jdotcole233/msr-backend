@@ -14,7 +14,7 @@ class tblGRN extends Model
         'user_id', 'fkWarehouseIDNo', 'fkActorID', 'fktblWHCommoditiesID',
         'dateReceived', 'noBagsReceived', 'weightPerBag', 'transactionType',
         'consigmentValue', 'maxStorageDuration', 'isCleaned', 'isDried', 'status',
-        'lastUpdatedByName', 'grnidno'
+        'lastUpdatedByName', 'grnidno', 'assessment', 'fkOrderId'
     ];
 
     public function actor (): BelongsTo

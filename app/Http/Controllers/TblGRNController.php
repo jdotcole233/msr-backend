@@ -108,9 +108,36 @@ class TblGRNController extends Controller
      * @param  \App\Models\tblGRN  $tblGRN
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, tblGRN $tblGRN)
+    public function update(Request $request, tblGRN $process_goods_received)
     {
-        //
+        $operator = $request->user()->load('operator')->operator;
+
+        info("grn ". json_encode($process_goods_received));
+
+        $data = $process_goods_received->update($request->all() + [
+            'lastUpdatedByName' => $operator->operatorName,
+        ]);
+
+        $inventoryInstance = tblInventory::where('fktblWHCommoditiesID', $request->input('fktblWHCommoditiesID'))->first();
+
+        if ($inventoryInstance) {
+            $lastQuantity = $inventoryInstance->totalReceived;
+            $lastQuantity = $lastQuantity + floatval($request->input('noBagsReceived'));
+            $inventoryInstance->update(['totalReceived' => $lastQuantity]);
+        } else {
+            tblInventory::create([
+                'fkWarehouseIDNo' => $request->user()->load(['operator'])->operator->fkWarehouseIDNo, 
+                'fktblWHCommoditiesID' => $request->input('fktblWHCommoditiesID'),
+                'totalReceived' => $request->input('noBagsReceived'), 
+                'totalIssued' => 0,
+            ]);
+        }
+
+    
+        return response()->json([
+            'data' => $data,
+            'message' => 'Goods processed successfully.'
+        ]);
     }
 
     /**

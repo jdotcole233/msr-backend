@@ -37,5 +37,10 @@ class tblOrder extends Model
     {
         return $this->belongsTo(tblActor::class, 'fkActorID', 'id');
     }
+
+    public function grn(): HasOne
+    {
+        return $this->hasOne(tblGRN::class, 'fkOrderId', 'id');
+    }
  
 }

@@ -2,9 +2,7 @@
 
 namespace App\Http\Ussd\States;
 
-use App\Http\Ussd\States\PlaceOrder;
 use Sparors\Ussd\State;
-use App\Http\Ussd\States\Error;
 
 class CommodityUnitPriceSellOfferState extends State
 {

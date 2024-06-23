@@ -3,7 +3,6 @@
 namespace App\Http\Ussd\States;
 
 use Sparors\Ussd\State;
-use App\Http\Ussd\States\Error;
 
 class GenderState extends State
 {

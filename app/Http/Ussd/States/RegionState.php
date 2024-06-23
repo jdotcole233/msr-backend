@@ -2,9 +2,7 @@
 
 namespace App\Http\Ussd\States;
 
-use App\Http\Ussd\States\Welcome;
 use Sparors\Ussd\State;
-use App\Http\Ussd\States\Error;
 
 class RegionState extends State
 {

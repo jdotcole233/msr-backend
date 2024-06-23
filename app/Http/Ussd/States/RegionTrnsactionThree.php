@@ -2,8 +2,6 @@
 
 namespace App\Http\Ussd\States;
 
-use App\Http\Ussd\States\Warehouse;
-use App\Http\Ussd\States\Welcome;
 use App\Models\tblWarehouse;
 use Sparors\Ussd\State;
 use App\Http\Ussd\States\Error;

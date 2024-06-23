@@ -2,9 +2,6 @@
 
 namespace App\Http\Ussd\States;
 
-use App\Http\Ussd\States\Regions\RegionTransactionType;
-use App\Http\Ussd\States\Regions\RegionTrnsaction;
-use App\Http\Ussd\States\Registration\RegionState;
 use App\Models\tblActor;
 use App\Models\tblWarehouse;
 use Illuminate\Http\Request;

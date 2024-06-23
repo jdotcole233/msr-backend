@@ -2,8 +2,6 @@
 
 namespace App\Http\Ussd\States;
 
-use App\Http\Ussd\States\PlaceOrder;
-use App\Http\Ussd\States\Error;
 use Sparors\Ussd\State;
 
 class CommodityQuantityBuyOrderState extends State

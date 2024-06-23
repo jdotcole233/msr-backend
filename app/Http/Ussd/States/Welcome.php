@@ -2,6 +2,7 @@
 
 namespace App\Http\Ussd\States;
 
+use App\Http\Ussd\States\Regions\RegionTransactionType;
 use App\Http\Ussd\States\Regions\RegionTrnsaction;
 use App\Http\Ussd\States\Registration\RegionState;
 use App\Models\tblActor;
@@ -74,7 +75,7 @@ class Welcome extends State
 
             $this->decision->between(1, 4, Warehouse::class)
                 ->equal(5, WarehouseInformationState::class)
-                ->equal(6, RegionTrnsaction::class)
+                ->equal(6, RegionTransactionType::class)
                 ->any(Error::class);
         }
     }

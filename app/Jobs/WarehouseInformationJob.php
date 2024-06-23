@@ -35,7 +35,7 @@ class WarehouseInformationJob implements ShouldQueue
         $warehouse = tblWarehouse::where('registeredName', $this->warehouseName)->first();
         $message = "Warehouse name: " . $warehouse->registeredName . "\n";
         $message .= "Region: " . $warehouse->region . "\n";
-        $message .= "Region: " . $warehouse->townCity . "\n";
+        !empty($warehouse->townCity) ? $message .= "Region: " . $warehouse->townCity . "\n" : "";
         $message .= "District: " . $warehouse->district . "\n";
         $message .= "Storage Capacity: " . $warehouse->storageCapacity . "\n";
         $message .= "Business Type: " . $warehouse->businessType . "\n";

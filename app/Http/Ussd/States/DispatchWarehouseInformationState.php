@@ -7,6 +7,9 @@ use Sparors\Ussd\State;
 
 class DispatchWarehouseInformationState extends State
 {
+
+    protected $action = self::PROMPT;
+    
     protected function beforeRendering(): void
     {
         $cache_record = json_decode($this->record->get($this->record->sessionId));

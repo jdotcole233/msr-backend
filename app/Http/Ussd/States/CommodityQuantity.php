@@ -9,9 +9,9 @@ class CommodityQuantity extends State
 {
     protected function beforeRendering(): void
     {
-        $this->menu->text("Specify Quantity")
-        ->lineBreak(2)
-        ->listing(['50Kg', '100Kg']);
+        $this->menu->text("Specify Quantity");
+        // ->lineBreak(2)
+        // ->listing(['50Kg', '100Kg']);
     }
 
     protected function afterRendering(string $argument): void

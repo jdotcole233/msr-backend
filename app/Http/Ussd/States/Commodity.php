@@ -42,8 +42,8 @@ class Commodity extends State
     {
         $cache_record = json_decode($this->record->get($this->record->sessionId));
 
-        info("commodity cache ". json_encode($cache_record));
-        info("commodity argument ". json_encode($argument));
+        info("commodity cache " . json_encode($cache_record));
+        info("commodity argument " . json_encode($argument));
 
         if (is_object($cache_record)) {
             // $commodities = collect($cache_record->warehouses)->pluck('commodityName')->all();
@@ -53,18 +53,18 @@ class Commodity extends State
                 ->commodities)
                 ->pluck('commodityName')
                 ->all();
-            $range = \range(1, count($this->commodities ));
+            $range = \range(1, count($this->commodities));
         }
 
 
         if (is_object($cache_record) && strcmp($argument, "0") != 0 && in_array($argument, $range)) {
-            $cache_record->commodityName = $this->commodities [intval($argument) - 1];
+            $cache_record->commodityName = $this->commodities[intval($argument) - 1];
             $cache_record_temp = json_encode($cache_record);
             $this->record->set($this->record->sessionId, $cache_record_temp);
         }
 
         $this->decision->custom(function () use ($cache_record) {
-            return is_object($cache_record) && strcmp("Withdrawal", $cache_record->transactionType) === 0;
+            return is_object($cache_record) && strcmp("Withdraw", $cache_record->transactionType) === 0;
         }, GRN::class)
             ->custom(function () use ($cache_record) {
                 return is_object($cache_record) && strcmp("Sell Offer", $cache_record->transactionType) === 0;
@@ -74,7 +74,7 @@ class Commodity extends State
             }, PackageSizeBuyOrderState::class)
             ->custom(function () use ($cache_record) {
                 return is_object($cache_record) && strcmp("Storage", $cache_record->transactionType) === 0;
-            }, PackageSize::class) 
+            }, PackageSize::class)
             ->equal('0', Welcome::class)
             ->any(Error::class);
     }

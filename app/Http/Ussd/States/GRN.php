@@ -2,6 +2,7 @@
 
 namespace App\Http\Ussd\States;
 
+use App\Models\tblGRN;
 use Sparors\Ussd\State;
 
 class GRN extends State
@@ -13,6 +14,13 @@ class GRN extends State
 
     protected function afterRendering(string $argument): void
     {
+        $grn_record = tblGRN::where('grnidno',  trim($argument))->first();
+
+        if (!$grn_record)
+        {
+            $this->decision->any(GrnError::class);
+        }
+
         $cache_record = json_decode($this->record->get($this->record->sessionId));
         if (is_object($cache_record)) 
         {
@@ -21,7 +29,9 @@ class GRN extends State
             $this->record->set($this->record->sessionId, $cache_record);
         }
 
-        $this->decision->numeric(PlaceOrder::class)
-        ->any(Error::class);
+        $this->decision->custom( function () use ($argument) {
+            return is_string($argument);
+        },PlaceOrder::class);
+        // ->any(Error::class);
     }
 }

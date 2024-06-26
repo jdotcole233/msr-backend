@@ -86,6 +86,7 @@ class Welcome extends State
             if (is_object($cache_record) && (intval($argument) >= 1 && intval($argument) <= 6)) {
                 $cache_record->region = $this->regions[intval($argument) - 1];
                 $cache_record->phoneNumer = $this->record->phoneNumber;
+                $cache_record->warehouses = tblWarehouse::with(['commodities'])->where('region', $this->regions[intval($argument) - 1])->get();
                 $cache_record = json_encode($cache_record);
                 $this->record->set($this->record->sessionId, $cache_record);
             }

@@ -7,7 +7,7 @@ use App\Http\Ussd\States\Error;
 
 class RegionTransactionType extends State
 {
-    private $transactionTypes = ['Storage', 'Sell Offer', 'Buy Order', 'Withdraw'];
+    private $transactionTypes = ['Storage', 'Sell Offer', 'Buy Order', 'Withdraw',  'Warehouse Info'];
 
     protected function beforeRendering(): void
     {
@@ -27,7 +27,8 @@ class RegionTransactionType extends State
             $this->record->set($this->record->sessionId, $cache_record);
         }
 
-        $this->decision->between(1, 4, RegionTrnsaction::class)
+        $this->decision->between(1, 4, Warehouse::class)
+            ->equal(5, WarehouseInformationState::class)
             ->any(Error::class);
     }
 }

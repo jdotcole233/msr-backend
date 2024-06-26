@@ -37,7 +37,8 @@ class RegionTrnsactionThree extends State
             $cache_record = json_encode($cache_record);
             $this->record->set($this->record->sessionId, $cache_record);
         }
-        $this->decision->between(1, 5, Warehouse::class)
+        // $this->decision->between(1, 5, Warehouse::class)
+        $this->decision->between(1, 5, RegionTransactionType::class)
             ->equal("0", Welcome::class)
             ->equal("#", RegionTrnsactionTwo::class)
             ->any(Error::class);

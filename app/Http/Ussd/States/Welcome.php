@@ -11,8 +11,17 @@ use Sparors\Ussd\State;
 class Welcome extends State
 {
 
-    private $transactionTypes = ['Storage', 'Sell Offer', 'Buy Order', 'Withdraw', 'Warehouse Info', 'Other Regions'];
+    // private $transactionTypes = ['Storage', 'Sell Offer', 'Buy Order', 'Withdraw', 'Warehouse Info', 'Other Regions'];
     // protected $actor
+
+    public $regions = [
+        "Ashanti",
+        "Brong Ahafo",
+        "Bono East",
+        "Central",
+        "Eastern",
+        "Greater Accra"
+    ];
 
 
     protected function beforeRendering(): void
@@ -46,9 +55,13 @@ class Welcome extends State
                 ->line("1. Register");
         } else {
             $this->menu->text($message)
-                ->lineBreak(2)
+                ->lineBreak()
                 ->line("Select option")
-                ->listing($this->transactionTypes, ". ");
+                ->lineBreak()
+                ->listing($this->regions, ". ")
+                ->lineBreak(2)
+                ->line("n. Next Page");
+                // ->line("0. Main menu");
         }
     }
 
@@ -64,15 +77,25 @@ class Welcome extends State
                 ->any(Error::class);
         } else {
 
-            if (in_array($argument, [1, 2, 3, 4])) {
-                $cache_record->transactionType = $this->transactionTypes[intval($argument) - 1];
+            // if (in_array($argument, [1, 2, 3, 4])) {
+            //     $cache_record->transactionType = $this->transactionTypes[intval($argument) - 1];
+            //     $cache_record = json_encode($cache_record);
+            //     $this->record->set($this->record->sessionId, $cache_record);
+            // }
+
+            if (is_object($cache_record) && (intval($argument) >= 1 && intval($argument) <= 6)) {
+                $cache_record->region = $this->regions[intval($argument) - 1];
+                $cache_record->phoneNumer = $this->record->phoneNumber;
                 $cache_record = json_encode($cache_record);
                 $this->record->set($this->record->sessionId, $cache_record);
             }
 
-            $this->decision->between(1, 4, Warehouse::class)
-                ->equal(5, WarehouseInformationState::class)
-                ->equal(6, RegionTransactionType::class)
+
+            // $this->decision->between(1, 7, Warehouse::class)
+            $this->decision->between(1, 7, RegionTransactionType::class)
+                ->equal('n', RegionTrnsactionTwo::class)
+                // ->equal(5, WarehouseInformationState::class)
+                // ->equal(6, RegionTransactionType::class)
                 ->any(Error::class);
         }
     }

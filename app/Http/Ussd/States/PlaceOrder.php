@@ -30,7 +30,7 @@ class PlaceOrder extends State
                 $cache_record->package_size ?? "",
                 $cache_record->grnID ?? "",
                 $this->record->phoneNumber,
-                $this->record->harvest_type,
+                $this->record->harvest_type ?? "",
             );
 
             info("Request MSR ". json_encode($ussdRequest));

@@ -21,7 +21,7 @@ class ActorAgeState extends State
             $this->record->set($this->record->sessionId, $cache_record);
         }
 
-        $this->decision->integer(ActorGhanaCardState::class)
+        $this->decision->numeric(ActorGhanaCardState::class)
         ->any(Error::class);
     }
 }

@@ -35,7 +35,7 @@ class TblOrderController extends Controller
     {
         $warehouseIDNo = Auth::user()->load(['operator'])->operator->fkWarehouseIDNo;
         $request = tblOrder::with(['actor', 'warehouse'])->where('fkWarehouseIDNo', $warehouseIDNo)
-            ->where('transactionType', "WITHDRAWAL")
+            ->whereIn('transactionType',  ["WITHDRAWAL", "WITHDRAW"])
             // ->WhereNull('status')
             ->Where('status', MsrUtility::$STATUS_ACCEPTED)
             // ->where('isComplete', MsrUtility::$COMPLETED)
@@ -152,11 +152,13 @@ class TblOrderController extends Controller
     public function withdrawal()
     {
         $warehouseIDNo = Auth::user()->load(['operator'])->operator->fkWarehouseIDNo;
+        info("warehouse ". json_encode($warehouseIDNo));
         $request = tblOrder::with(['actor', 'warehouse'])->where('fkWarehouseIDNo', $warehouseIDNo)
             ->whereIn('transactionType', ["WITHDRAWAL", "WITHDRAW"])
-            ->whereNull('isComplete')
+            ->where('isComplete', MsrUtility::$UNCOMPLETED)
             ->whereNull('status')
             ->paginate(5);
+        info("request ". json_encode($request));
 
         return response()->json([
             'data' => $request

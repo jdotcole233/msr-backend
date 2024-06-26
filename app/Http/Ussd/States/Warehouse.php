@@ -47,6 +47,7 @@ class Warehouse extends State
         }
 
         $this->decision->in($range, Commodity::class)
+            ->equal(0, Welcome::class)
             ->any(Error::class);
     }
 

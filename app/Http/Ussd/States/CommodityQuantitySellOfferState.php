@@ -20,7 +20,7 @@ class CommodityQuantitySellOfferState extends State
             $this->record->set($this->record->sessionId, $cache_record);
         }
 
-        $this->decision->integer(CommodityUnitPriceSellOfferState::class) //PlaceOrder
+        $this->decision->numeric(CommodityUnitPriceSellOfferState::class) //PlaceOrder
             ->any(Error::class);
     }
 }

@@ -67,7 +67,7 @@ class TextMessagingJob implements ShouldQueue
         if (strcmp($this->msrUSSDRequest->getTransactionType(), "Storage") == 0) {
             $message = $this->outputMessage($message);
             $message .= "\nDuration: " . $this->msrUSSDRequest->getDuration();
-        } else if (strcmp($this->msrUSSDRequest->getTransactionType(), "Withdrawal") == 0) {
+        } else if (strcmp($this->msrUSSDRequest->getTransactionType(), "Withdraw") == 0) {
             $message .= "\nGRN ID: " . $this->msrUSSDRequest->getGRNID();
         } else {
             $message = $this->outputMessage($message);

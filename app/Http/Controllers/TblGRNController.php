@@ -121,6 +121,8 @@ class TblGRNController extends Controller
 
         $inventoryInstance = tblInventory::where('fktblWHCommoditiesID', $request->input('fktblWHCommoditiesID'))->first();
 
+        
+
         if ($inventoryInstance) {
             $lastQuantity = $inventoryInstance->totalReceived;
             $lastQuantity = $lastQuantity + floatval($request->input('noBagsReceived'));

@@ -37,7 +37,7 @@ class OrderNotificationJob implements ShouldQueue
         $phoneNumber = $this->order->actor->contactPhone;
 
         $message .= "Hi " . $this->order->actor->name;
-        $message .= "\nYour " . strtolower($this->order->transactionType) . " request for " . json_decode($this->order->orderDetails)['commodityName'];
+        $message .= "\nYour " . strtolower($this->order->transactionType) . " request for " . json_decode($this->order->orderDetails)->commodityName;
         $message .= "\nhas been ". $this->order->status == 0 ? " declined." : "accepted.";
         
         $request = Http::post(config('app.sms_endpoint'), [

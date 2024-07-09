@@ -19,11 +19,11 @@ class tblOrderFactory extends Factory
         // $isBuyOrder = Arr::random([0, 1]);
         $transactionType = Arr::random(['STORAGE', 'BUY ORDER', 'WITHDRAWAL', 'OFFTAKE']);
         $commodities = Arr::random([
-            ['name' => 'Cowpea', 'id' => 84],
-            ['name' => 'Millet', 'id' => 85],
-            ['name' => 'Sorghum', 'id' => 86],
-            ['name' => 'Cowpea', 'id' => 87],
-            ['name' => 'Shea', 'id' => 88]
+            ['name' => 'Soy Bean', 'id' => 570],
+            ['name' => 'Maize', 'id' => 571],
+            ['name' => 'Sorghum', 'id' => 572],
+            ['name' => 'Cowpea', 'id' => 573],
+            ['name' => 'Shea', 'id' => 574]
         ]);
         $harvest_type = Arr::random(['Mechanical threshing', 'Manual threshing']);
         
@@ -40,9 +40,9 @@ class tblOrderFactory extends Factory
         ];
 
         return [
-            'user_id' => 15,
+            // 'user_id' => 15,
             'fkWarehouseIDNo' => "YNIB9",
-            'fkActorID' => \random_int(2, 4),
+            'fkActorID' => \random_int(5, 10),
             'contactPhone' => $this->faker->phoneNumber(),
             'isBuyOrder' => strcmp($transactionType, "BUY ORDER") == 0 ? 1 : 0,
             'transactionType' => $transactionType,

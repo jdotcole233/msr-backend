@@ -21,7 +21,7 @@ class AuthController extends Controller
         if (!Auth::attempt($credentials))
         {
             return response()->json([
-                'message' => 'Unauthorized'
+                'message' => 'Unauthorized, check your credentails and try again'
             ], 401);
         }
 
@@ -65,6 +65,8 @@ class AuthController extends Controller
             'businessType' => $request->input('businessType'),
             'storageCapacity' => $request->input('storageCapacity'),
             'warehouseIDNo' => Str::upper(Str::random(6)),
+            'GPSLat' => $request->input('GPSLat'), 
+            'GPSLong' => $request->input('GPSLong')
         ]);
 
         $operator = tblOperator::create([

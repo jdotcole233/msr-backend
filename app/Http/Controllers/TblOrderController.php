@@ -24,7 +24,8 @@ class TblOrderController extends Controller
     }
 
 
-    public function buyOrder() {
+    public function buyOrder()
+    {
         return response()->json([
             'data' => $this->getOrder('BUY ORDER')
         ], 200);
@@ -35,10 +36,47 @@ class TblOrderController extends Controller
     {
         $warehouseIDNo = Auth::user()->load(['operator'])->operator->fkWarehouseIDNo;
         $request = tblOrder::with(['actor', 'warehouse'])->where('fkWarehouseIDNo', $warehouseIDNo)
-            ->whereIn('transactionType',  ["WITHDRAWAL", "WITHDRAW"])
+            ->whereIn('transactionType', ["WITHDRAWAL", "WITHDRAW"])
             // ->WhereNull('status')
             ->Where('status', MsrUtility::$STATUS_ACCEPTED)
             // ->where('isComplete', MsrUtility::$COMPLETED)
+            ->paginate(5);
+
+        return response()->json([
+            'data' => $request
+        ], 200);
+    }
+
+    public function buyOrderToBeProcessed()
+    {
+        $warehouseIDNo = Auth::user()->load(['operator'])->operator->fkWarehouseIDNo;
+        $request = tblOrder::with(['actor', 'warehouse'])->where('fkWarehouseIDNo', $warehouseIDNo)
+            ->whereIn('transactionType', ["BUY ORDER"])
+            // ->WhereNull('status')
+            ->Where('status', MsrUtility::$STATUS_ACCEPTED)
+            ->where(function ($query) {
+                $query->where('isComplete', MsrUtility::$UNCOMPLETED)
+                    ->orWhereNull('isComplete');
+            })
+            ->paginate(5);
+
+        return response()->json([
+            'data' => $request
+        ], 200);
+    }
+
+
+    public function withdrawlOrderToProcess()
+    {
+        $warehouseIDNo = Auth::user()->load(['operator'])->operator->fkWarehouseIDNo;
+        $request = tblOrder::with(['actor', 'warehouse'])->where('fkWarehouseIDNo', $warehouseIDNo)
+            ->whereIn('transactionType', ["WITHDRAWAL", "WITHDRAW"])
+            // ->WhereNull('status')
+            ->Where('status', MsrUtility::$STATUS_ACCEPTED)
+            ->where(function ($query) {
+                $query->where('isComplete', MsrUtility::$UNCOMPLETED)
+                    ->orWhereNull('isComplete');
+            })
             ->paginate(5);
 
         return response()->json([
@@ -54,8 +92,10 @@ class TblOrderController extends Controller
             ->where('fkWarehouseIDNo', $warehouseIDNo)
             ->whereIn('transactionType', ['STORAGE', 'OFFTAKE'])
             ->where(function ($query) {
-                $query->where('isComplete', MsrUtility::$UNCOMPLETED);
-                    // ->orWhereNull('isComplete');
+                $query
+                    ->whereIn('isComplete', [MsrUtility::$UNCOMPLETED, MsrUtility::$COMPLETEDASSESSMENTFAILED])
+                    ->where('status', MsrUtility::$STATUS_ACCEPTED);
+                // ->orWhereNull('isComplete');
             })
             ->paginate(5);
 
@@ -73,7 +113,7 @@ class TblOrderController extends Controller
             ->whereIn('transactionType', ['STORAGE', 'OFFTAKE'])
             ->where(function ($query) {
                 $query->where('isComplete', MsrUtility::$COMPLETED);
-                    // ->orWhereNull('isComplete');
+                // ->orWhereNull('isComplete');
             })
             ->whereHas('grn', function ($query) {
                 $query->whereNull('dateReceived');
@@ -99,7 +139,7 @@ class TblOrderController extends Controller
             })
             ->paginate(5);
 
-        info("data ". json_encode($request));
+        info("data " . json_encode($request));
 
         return response()->json([
             'data' => $request
@@ -124,26 +164,29 @@ class TblOrderController extends Controller
         ], 200);
     }
 
-    public function grnProcessed() {
-        $grn = tblGRN::with(['commodity', 'actor'])
-        ->paginate(5);
+    public function grnProcessed()
+    {
+        $grn = tblGRN::with(['commodity', 'actor', 'order'])
+            ->paginate(5);
 
         return response()->json([
             'data' => $grn
         ], 200);
     }
 
-    public function ginProcessed() {
-        $gin = tblGIN::with(['commodity', 'actor'])
-        ->paginate(5);
+    public function ginProcessed()
+    {
+        $gin = tblGIN::with(['commodity', 'actor', 'order'])
+            ->paginate(5);
 
         return response()->json([
             'data' => $gin
         ], 200);
     }
-    public function stockOnHand() {
+    public function stockOnHand()
+    {
         $inventory = tblInventory::with(['commodity'])
-        ->paginate(5);
+            ->paginate(5);
         return response()->json([
             'data' => $inventory
         ], 200);
@@ -152,13 +195,18 @@ class TblOrderController extends Controller
     public function withdrawal()
     {
         $warehouseIDNo = Auth::user()->load(['operator'])->operator->fkWarehouseIDNo;
-        info("warehouse ". json_encode($warehouseIDNo));
+        info("warehouse " . json_encode($warehouseIDNo));
         $request = tblOrder::with(['actor', 'warehouse'])->where('fkWarehouseIDNo', $warehouseIDNo)
             ->whereIn('transactionType', ["WITHDRAWAL", "WITHDRAW"])
-            ->where('isComplete', MsrUtility::$UNCOMPLETED)
-            ->whereNull('status')
-            ->paginate(5);
-        info("request ". json_encode($request));
+            ->where(function ($query) {
+                $query->where('isComplete', MsrUtility::$UNCOMPLETED)
+                    ->orWhereNull('isComplete');
+            })
+            ->where(function ($query) {
+                $query->whereNull('status')
+                    ->orWhere('status', 0);
+            })->paginate(5);
+        info("request " . json_encode($request));
 
         return response()->json([
             'data' => $request
@@ -178,7 +226,10 @@ class TblOrderController extends Controller
         $warehouseIDNo = Auth::user()->load(['operator'])->operator->fkWarehouseIDNo;
         $request = tblOrder::with(['actor', 'warehouse'])->where('fkWarehouseIDNo', $warehouseIDNo)
             ->where('transactionType', $transactionType)
-            ->whereNull('status')
+            ->where(function ($query) {
+                $query->whereNull('status')
+                    ->orWhere('status', 0);
+            })
             ->paginate(5);
 
         return $request;
@@ -192,7 +243,7 @@ class TblOrderController extends Controller
                 ? MsrUtility::$STATUS_ACCEPTED
                 : MsrUtility::$STATUS_DECLINED,
             'lastUpdatedByName' => Auth::user()->load(['operator'])->operator->operatorName,
-            'isComplete' =>  in_array($order->transactionType, ['STORAGE', 'OFFTAKE'])  ? MsrUtility::$UNCOMPLETED : null
+            'isComplete' => in_array($order->transactionType, ['STORAGE', 'OFFTAKE']) ? MsrUtility::$UNCOMPLETED : null
         ]);
 
         if (!$orderState) {
@@ -209,21 +260,34 @@ class TblOrderController extends Controller
     }
 
 
-    public function qualityAssessmentUpdate(Request $request, tblOrder $order) {
+    public function qualityAssessmentUpdate(Request $request, tblOrder $order)
+    {
         $user = $request->user()->load('operator');
+        $data = json_decode($request->input("assessment"));
+        // info(json_encode($data));
+        // info(json_encode($data->status));
+        // info(json_encode($data->status));
         $data = tblGRN::create([
             'user_id' => $user->id,
             'fkWarehouseIDNo' => $user->operator->fkWarehouseIDNo,
             'lastUpdatedByName' => $user->operator->operatorName,
-            'grnidno' => Str::upper(Str::random(10)),
+            'grnidno' => now()->year . "-" . Str::upper(Str::random(10)),
             'assessment' => $request->input("assessment"),
             'fkOrderId' => $order->id,
             'fkActorID' => $order->fkActorID,
             'fktblWHCommoditiesID' => json_decode($order->orderDetails)->commodityId
         ]);
 
+        $completed = MsrUtility::$COMPLETED;
+        if (strcmp($data->status, "REJECT") == 0) {
+            info("Passed test ");
+            $completed = MsrUtility::$COMPLETEDASSESSMENTFAILED;
+        }
+
+        info("Status " . json_encode($completed));
+
         $order->update([
-            'isComplete' => MsrUtility::$COMPLETED,
+            'isComplete' => $completed,
             'lastUpdatedByName' => $user->operator->operatorName
         ]);
 
@@ -237,7 +301,8 @@ class TblOrderController extends Controller
 
         return response()->json([
             'data' => [
-                'message' => "Assessment completed successfully..."
+                'message' => "Assessment completed successfully...",
+                'isComplete' => strcmp($data->status, "accept") === 0 ? MsrUtility::$COMPLETED : MsrUtility::$COMPLETEDASSESSMENTFAILED
             ]
         ], 200);
     }

@@ -40,6 +40,7 @@ class TblGINController extends Controller
     public function store(Request $request)
     {
 
+        info(json_encode($request->all()));
         $order = tblOrder::find($request->input('requestID'));
         $order->update([
             'isComplete' => MsrUtility::$COMPLETED
@@ -48,22 +49,23 @@ class TblGINController extends Controller
 
         $withdrawalOrder = tblGIN::create([
             'user_id' => $request->user()->id,
-            'fkWarehouseIDNo' => $request->input('warehouseID'),
-            'fkActorID' => $request->input('actorID'),
-            'fktblWHCommoditiesID' => $request->input('commodityID'),
+            'fkWarehouseIDNo' => $order->fkWarehouseIDNo,
+            'fkActorID' => $order->fkActorID,
+            'fktblWHCommoditiesID' => $request->input('commodityId'),
             'dateIssued' => $request->input('dateIssued'),
-            'noBagsIssued' => $request->input('numberOfBagsIssued'),
+            'noBagsIssued' => $request->input('noBagsIssued'),
             'weightPerBag' => $request->input('weightPerBag'),
-            'pricePerBag' => $request->input('pricePerBag'),
+            'pricePerBag' => $request->input('unit_price'),
             'lastUpdatedByName' => $request->user()->load(['operator'])->operator->operatorName,
-            'ginidno' => Str::upper(Str::random(5))
+            'ginidno' => now()->year. '-'.Str::upper(Str::random(5)), 
+            'fkOrderId' => $request->input('requestID')
         ]);
 
-        $inventoryInstance = tblInventory::where('fktblWHCommoditiesID', $request->input('warehouseID'))->first();
+        $inventoryInstance = tblInventory::where('fktblWHCommoditiesID', $order->fkWarehouseIDNo)->first();
 
         if ($inventoryInstance) {
             $lastQuantity = $inventoryInstance->totalReceived;
-            $lastQuantity = $lastQuantity - floatval($request->input('numberOfBagsIssued'));
+            $lastQuantity = $lastQuantity - floatval($request->input('noBagsIssued'));
             $inventoryInstance->update(['totalIssued' => $lastQuantity]);
         }
         

@@ -2,9 +2,12 @@
 
 namespace Database\Seeders;
 
+use App\Models\tblActor;
 use App\Models\tblCommodity;
+use App\Models\tblOperator;
 use App\Models\tblOrder;
 use App\Models\tblWarehouse;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -17,13 +20,20 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         // \App\Models\User::factory(10)->create();
+
         // tblWarehouse::factory()
         // ->has(tblCommodity::factory()->count(5), 'commodities')
+        // ->for(User::factory(), 'user')
+        // ->has(tblOperator::factory()->count(1), 'operators')
         // ->count(16)
         // ->create();
 
         tblOrder::factory()
-        ->count(20)
+        ->count(50)
         ->create();
+
+        // tblActor::factory()
+        // ->count(6)
+        // ->create();
     }
 }

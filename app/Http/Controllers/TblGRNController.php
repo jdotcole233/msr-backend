@@ -54,6 +54,7 @@ class TblGRNController extends Controller
             'fkWarehouseIDNo' => $operator->fkWarehouseIDNo,
             'lastUpdatedByName' => $operator->operatorName,
             'grnidno' => Str::upper(Str::random(10)),
+            'fkOrderId' => $request->input('requestID')
         ]);
 
         $inventoryInstance = tblInventory::where('fktblWHCommoditiesID', $request->input('fktblWHCommoditiesID'))->first();

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\FeeRequest;
 use App\Models\tblFee;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TblFeeController extends Controller
 {
@@ -30,7 +31,7 @@ class TblFeeController extends Controller
     public function store(FeeRequest $request)
     {
         $fee = tblFee::create($request->except('warehouseIDNo') + [
-            'user_id' => 1,
+            'user_id' => Auth::user()->load('operator')->id,
             'fkWarehouseIDNo' => $request->input("warehouseIDNo")
         ]);
 

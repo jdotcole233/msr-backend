@@ -13,12 +13,17 @@ class tblGIN extends Model
     public $fillable = [
         'user_id', 'fkWarehouseIDNo', 'fkActorID', 'fktblWHCommoditiesID',
         'dateIssued', 'noBagsIssued', 'weightPerBag', 'pricePerBag', 'status',
-        'lastUpdatedByName', 'ginidno'
+        'lastUpdatedByName', 'ginidno', 'fkOrderId'
     ];
 
     public function actor (): BelongsTo
     {
         return $this->belongsTo(tblActor::class, 'fkActorID', 'id');
+    }
+
+    public function order () : BelongsTo
+    {
+        return $this->belongsTo(tblOrder::class, 'fkOrderId', 'id');
     }
 
 

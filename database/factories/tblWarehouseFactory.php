@@ -47,7 +47,9 @@ class tblWarehouseFactory extends Factory
         'mainContactPosition' => $this->faker->jobTitle(),
         'mainContactTel' => $this->faker->phoneNumber(), 
         'mainContactEmail' => $this->faker->email(), 
-        'declarationAccepted' => $this->faker->boolean()
+        'declarationAccepted' => $this->faker->boolean(),
+        'GPSLat' =>  $this->faker->latitude(),
+        'GPSLong' => $this->faker->longitude(),
         ];
     }
 }

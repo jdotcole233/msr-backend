@@ -22,6 +22,11 @@ class tblGRN extends Model
         return $this->belongsTo(tblActor::class, 'fkActorID', 'id');
     }
 
+    public function order () : BelongsTo
+    {
+        return $this->belongsTo(tblOrder::class, 'fkOrderId', 'id');
+
+    }
 
     public function user () : BelongsTo
     {

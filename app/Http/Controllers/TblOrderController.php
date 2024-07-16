@@ -237,7 +237,6 @@ class TblOrderController extends Controller
 
     public function orderState(Request $request, tblOrder $order)
     {
-        info("order " . json_encode($order));
         $orderState = $order->update([
             'status' => strcmp($request->input('status'), 'ACCEPTED') === 0
                 ? MsrUtility::$STATUS_ACCEPTED
@@ -252,6 +251,7 @@ class TblOrderController extends Controller
             ], 200);
         }
 
+        $order = tblOrder::find($order->id);
         dispatch(new OrderNotificationJob($order));
 
         return response()->json([
@@ -264,9 +264,7 @@ class TblOrderController extends Controller
     {
         $user = $request->user()->load('operator');
         $data = json_decode($request->input("assessment"));
-        info(json_encode($request));
-        info(json_encode($request->state));
-        info(json_encode($request->state));
+
         $data = tblGRN::create([
             'user_id' => $user->id,
             'fkWarehouseIDNo' => $user->operator->fkWarehouseIDNo,
@@ -279,13 +277,10 @@ class TblOrderController extends Controller
         ]);
 
         $completed = MsrUtility::$COMPLETED;
-        info(json_encode(strcmp(strtoupper(trim($request->state)), 'REJECT')));
         if (strcmp(strtoupper(trim($request->state)), 'REJECT') == 0) {
             info("Passed test ");
             $completed = MsrUtility::$COMPLETEDASSESSMENTFAILED;
         }
-
-        info("Status " . json_encode($completed));
 
         $order->update([
             'isComplete' => $completed,

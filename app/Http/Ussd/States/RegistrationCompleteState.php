@@ -1,8 +1,10 @@
 <?php
 
 namespace App\Http\Ussd\States;
+
 use App\Jobs\MsrActorJob;
 use App\Utility\MsrActor;
+use Sparors\Ussd\State;
 
 class RegistrationCompleteState extends State
 {

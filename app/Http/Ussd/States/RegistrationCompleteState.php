@@ -21,8 +21,8 @@ class RegistrationCompleteState extends State
                 $cache_record->gender,
                 $cache_record->name,
                 $this->record->phoneNumber,
-                $this->record->ghana_card,
-                $this->record->age,
+                $cache_record->ghana_card,
+                $cache_record->age,
             );
 
             dispatch(new MsrActorJob($actor));

@@ -18,6 +18,7 @@ class ActorNameState extends State
             $cache_record->name = $argument;
             $cache_record = json_encode($cache_record);
             $this->record->set($this->record->sessionId, $cache_record);
+            info("Ghana Card ". json_encode($cache_record));
         }
 
         $this->decision->custom(function ($user_input) {

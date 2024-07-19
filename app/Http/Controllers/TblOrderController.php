@@ -268,9 +268,12 @@ class TblOrderController extends Controller
 
         $commodityName = json_decode($order->orderDetails)->commodityName;
         $nameParts = explode(" ", $commodityName);
+        info("parts ". json_encode($nameParts));
         $name = $nameParts[0];
 
-        $commodity = tblCommodity::where('commodityName', $name);
+        $commodity = tblCommodity::where('commodityName', $name)
+        ->where('fkWarehouseIDNo', $order->fkWarehouseIDNo);
+
         if (count($nameParts) > 1) {
             $size = $nameParts[1];
             $commodity = $commodity->where('packingSize', $size)->first();
@@ -278,6 +281,8 @@ class TblOrderController extends Controller
         {
             $commodity = $commodity->first();
         }
+
+        info("commodity ". json_encode($commodity));
 
 
         $data = tblGRN::create([

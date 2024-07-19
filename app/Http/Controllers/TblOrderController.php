@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\OrderNotificationJob;
+use App\Jobs\QualityAssessmentJob;
 use App\Models\tblCommodity;
 use App\Models\tblGIN;
 use App\Models\tblGRN;
@@ -266,11 +267,8 @@ class TblOrderController extends Controller
         $user = $request->user()->load('operator');
         $data = json_decode($request->input("assessment"));
 
-        info("order ". json_encode($order));
-
         $commodityName = json_decode($order->orderDetails);
         $nameParts = explode("-", $commodityName->commodityName);
-        info("parts ". json_encode($nameParts));
         $name = $nameParts[0];
 
         $commodity = tblCommodity::where('commodityName', $name)
@@ -283,9 +281,6 @@ class TblOrderController extends Controller
         {
             $commodity = $commodity->where('packingSize', $commodityName->package_size)->first();
         }
-
-        info("commodity ". json_encode($commodity));
-
 
         $data = tblGRN::create([
             'user_id' => $user->id,
@@ -315,7 +310,7 @@ class TblOrderController extends Controller
             ], 200);
         }
 
-        // dispatch(new OrderNotificationJob($order));
+        dispatch(new QualityAssessmentJob($order, $completed));
 
         return response()->json([
             'data' => [

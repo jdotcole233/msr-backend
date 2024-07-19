@@ -267,7 +267,7 @@ class TblOrderController extends Controller
         $data = json_decode($request->input("assessment"));
 
         $commodityName = json_decode($order->orderDetails)->commodityName;
-        $nameParts = explode(" ", $commodityName);
+        $nameParts = explode("-", $commodityName);
         info("parts ". json_encode($nameParts));
         $name = $nameParts[0];
 

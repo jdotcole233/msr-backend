@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\OrderNotificationJob;
+use App\Models\tblCommodity;
 use App\Models\tblGIN;
 use App\Models\tblGRN;
 use App\Models\tblInventory;
@@ -265,6 +266,20 @@ class TblOrderController extends Controller
         $user = $request->user()->load('operator');
         $data = json_decode($request->input("assessment"));
 
+        $commodityName = json_decode($order->orderDetails)->commodityName;
+        $nameParts = explode(" ", $commodityName);
+        $name = $nameParts[0];
+
+        $commodity = tblCommodity::where('commodityName', $name);
+        if (count($nameParts) > 1) {
+            $size = $nameParts[1];
+            $commodity = $commodity->where('packingSize', $size)->first();
+        } else 
+        {
+            $commodity = $commodity->first();
+        }
+
+
         $data = tblGRN::create([
             'user_id' => $user->id,
             'fkWarehouseIDNo' => $user->operator->fkWarehouseIDNo,
@@ -273,7 +288,7 @@ class TblOrderController extends Controller
             'assessment' => $request->input("assessment"),
             'fkOrderId' => $order->id,
             'fkActorID' => $order->fkActorID,
-            'fktblWHCommoditiesID' => json_decode($order->orderDetails)->commodityId
+            'fktblWHCommoditiesID' => $commodity->id
         ]);
 
         $completed = MsrUtility::$COMPLETED;

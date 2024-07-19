@@ -15,7 +15,7 @@ class Warehouse extends State
 
         if (is_object($cache_record)) {
             $this->warehouses = collect($cache_record->warehouses)->map(function ($warehouse) {
-                return $warehouse['registeredName'] . "-" . $warehouse['packingSize'];
+                return $warehouse->registeredName . "-" . $warehouse->packingSize;
             })->all();
         }
 

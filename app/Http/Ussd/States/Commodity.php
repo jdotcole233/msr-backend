@@ -20,7 +20,10 @@ class Commodity extends State
                 ->where('registeredName', $warehouseName)
                 ->first()
                 ->commodities)
-                ->pluck('commodityName')
+                ->map(function ($commodity) {
+                    return $commodity->commodityName . " - ". number_format($commodity->packingSize) . " Kg";
+                })
+                // ->pluck('commodityName')
                 ->all();
         }
 

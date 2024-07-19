@@ -266,6 +266,8 @@ class TblOrderController extends Controller
         $user = $request->user()->load('operator');
         $data = json_decode($request->input("assessment"));
 
+        info("order ". json_encode($order));
+
         $commodityName = json_decode($order->orderDetails)->commodityName;
         $nameParts = explode("-", $commodityName);
         info("parts ". json_encode($nameParts));

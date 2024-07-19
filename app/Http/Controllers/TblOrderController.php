@@ -268,8 +268,8 @@ class TblOrderController extends Controller
 
         info("order ". json_encode($order));
 
-        $commodityName = json_decode($order->orderDetails)->commodityName;
-        $nameParts = explode("-", $commodityName);
+        $commodityName = json_decode($order->orderDetails);
+        $nameParts = explode("-", $commodityName->commodityName);
         info("parts ". json_encode($nameParts));
         $name = $nameParts[0];
 
@@ -281,7 +281,7 @@ class TblOrderController extends Controller
             $commodity = $commodity->where('packingSize', $size)->first();
         } else 
         {
-            $commodity = $commodity->first();
+            $commodity = $commodity->where('packingSize', $commodityName->package_size)->first();
         }
 
         info("commodity ". json_encode($commodity));

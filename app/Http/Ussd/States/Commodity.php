@@ -21,12 +21,12 @@ class Commodity extends State
                 ->first()
                 ->commodities)
                 ->unique('commodityName')
-                ->map(function ($commodity) {
-                    return $commodity->commodityName;
-                    //  . " - ". number_format($commodity->packingSize) . " Kg";
-                })
-                // ->pluck('commodityName')
+                // ->map(function ($commodity) {
+                //     return $commodity->commodityName;
+                // })
+                ->pluck('commodityName')
                 ->all();
+            info("commodities ". json_encode($this->commodities));
         }
 
         if (count($this->commodities) <= 0) {

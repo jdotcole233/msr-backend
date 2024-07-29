@@ -101,7 +101,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('off-take', [TblOrderController::class, 'offtake']);
         Route::get('buy-order', [TblOrderController::class, 'buyOrder']);
         Route::get('quality-assessment', [TblOrderController::class, 'qualityAssessment']);
-        Route::put('resetpassword/{user}', [TblOperatorController::class, 'resetOperatorPassword']);
+        Route::put('resetpassword/{operator}', [TblOperatorController::class, 'resetOperatorPassword']);
         Route::put('setpassword/{operator}', [TblOperatorController::class, 'setOperatorPassword']);
 
         Route::put('orderStatus/{order}', [TblOrderController::class, 'orderState']);

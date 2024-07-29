@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\OperatorRequest;
 use App\Http\Requests\OperatorUpdateRequest;
 use App\Jobs\OperatorOnboardedJob;
+use App\Jobs\ResetPasswordJob;
 use App\Models\tblOperator;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -148,12 +149,14 @@ class TblOperatorController extends Controller
     }
 
 
-    public function resetOperatorPassword(User $user)
+    public function resetOperatorPassword(tblOperator $operator)
     {
         $generate_password = Str::random(9);
-        $userUpdated = $user->update([
+        info("Operator user ". json_encode($operator->user));
+        $userUpdated = $operator->user->update([
             'password' => Hash::make($generate_password)
         ]);
+        info("upadeted". json_encode($userUpdated));
 
         if (!$userUpdated) {
             return response()->json([
@@ -161,11 +164,10 @@ class TblOperatorController extends Controller
             ], 200);
         }
 
-
         //Dispatch SMS to user
-
+        dispatch(new ResetPasswordJob($operator, $generate_password));
         return response()->json([
-            'message' => 'Reset successfuly'
+            'message' => 'Reset successfuly. Check operator sms for new password'
         ], 200);
     }
 }

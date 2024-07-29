@@ -267,9 +267,14 @@ class TblOrderController extends Controller
         $user = $request->user()->load('operator');
         $data = json_decode($request->input("assessment"));
 
+        info("order ". json_encode($order));
+
         $commodityName = json_decode($order->orderDetails);
+        info("commodity ". json_encode($commodityName));
         $nameParts = explode("-", $commodityName->commodityName);
+        info("name parts ". json_encode($nameParts));
         $name = $nameParts[0];
+        info("name ". json_encode($name));
 
         $commodity = tblCommodity::where('commodityName', $name)
         ->where('fkWarehouseIDNo', $order->fkWarehouseIDNo);

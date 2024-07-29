@@ -119,7 +119,7 @@ class TblGRNController extends Controller
             'lastUpdatedByName' => $operator->operatorName,
         ]);
 
-        $inventoryInstance = tblInventory::where('fktblWHCommoditiesID', $request->input('fktblWHCommoditiesID'))->first();
+        $inventoryInstance = tblInventory::where('fktblWHCommoditiesID', $process_goods_received->fktblWHCommoditiesID)->first();
 
         
 
@@ -130,7 +130,7 @@ class TblGRNController extends Controller
         } else {
             tblInventory::create([
                 'fkWarehouseIDNo' => $request->user()->load(['operator'])->operator->fkWarehouseIDNo, 
-                'fktblWHCommoditiesID' => $request->input('fktblWHCommoditiesID'),
+                'fktblWHCommoditiesID' => $process_goods_received->fktblWHCommoditiesID,
                 'totalReceived' => $request->input('noBagsReceived'), 
                 'totalIssued' => 0,
             ]);

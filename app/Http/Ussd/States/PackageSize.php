@@ -11,6 +11,12 @@ class PackageSize extends State
 
     protected function beforeRendering(): void
     {
+        $cache_record = json_decode($this->record->get($this->record->sessionId));
+        if (is_object($cache_record))
+        {
+            $this->package_size = $cache_record->sizes; 
+        }
+
         $this->menu->text("Select Package size")
         ->lineBreak(2)
         ->listing($this->package_size);
@@ -27,7 +33,8 @@ class PackageSize extends State
             $this->record->set($this->record->sessionId, $cache_record);
         }
         
-        $this->decision->between(1, 2, CommodityQuantity::class)
+        $range = \range(1, count($this->package_size));
+        $this->decision->in($range, CommodityQuantity::class)
         ->any(Error::class);
 
 

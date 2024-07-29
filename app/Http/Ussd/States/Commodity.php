@@ -20,8 +20,10 @@ class Commodity extends State
                 ->where('registeredName', $warehouseName)
                 ->first()
                 ->commodities)
+                ->unique('commodityName')
                 ->map(function ($commodity) {
-                    return $commodity->commodityName . " - ". number_format($commodity->packingSize) . " Kg";
+                    return $commodity->commodityName;
+                    //  . " - ". number_format($commodity->packingSize) . " Kg";
                 })
                 // ->pluck('commodityName')
                 ->all();
@@ -50,13 +52,17 @@ class Commodity extends State
 
         if (is_object($cache_record)) {
             // $commodities = collect($cache_record->warehouses)->pluck('commodityName')->all();
-            $this->commodities = collect(collect($cache_record->warehouses)
-                ->where('registeredName', $cache_record->warehouseName)
-                ->first()
-                ->commodities)
-                ->pluck('commodityName')
+            $commodity = collect(collect($cache_record->warehouses)
+            ->where('registeredName', $cache_record->warehouseName)
+            ->first()
+            ->commodities);
+            
+            $this->commodities = $commodity->unique('commodityName')->pluck('commodityName')
                 ->all();
             $range = \range(1, count($this->commodities));
+
+            $packaging_sizes = $commodity->where('commodityName', $argument)->pluck('packingSize');
+            $cache_record->sizes = $packaging_sizes;
         }
 
 

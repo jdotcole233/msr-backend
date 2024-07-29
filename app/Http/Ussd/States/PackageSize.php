@@ -17,7 +17,7 @@ class PackageSize extends State
             $this->package_size = $cache_record->sizes; 
         }
 
-        $this->menu->text("Select Package size")
+        $this->menu->text("Select Package size (kg)")
         ->lineBreak(2)
         ->listing($this->package_size);
     }

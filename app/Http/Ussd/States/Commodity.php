@@ -47,9 +47,6 @@ class Commodity extends State
     {
         $cache_record = json_decode($this->record->get($this->record->sessionId));
 
-        info("commodity cache " . json_encode($cache_record));
-        info("commodity argument " . json_encode($argument));
-
         if (is_object($cache_record)) {
             // $commodities = collect($cache_record->warehouses)->pluck('commodityName')->all();
             $commodity = collect(collect($cache_record->warehouses)
@@ -62,15 +59,19 @@ class Commodity extends State
             $range = \range(1, count($this->commodities));
 
             $packaging_sizes = $commodity->where('commodityName', $argument)->pluck('packingSize');
-            $cache_record->sizes = $packaging_sizes;
         }
 
 
         if (is_object($cache_record) && strcmp($argument, "0") != 0 && in_array($argument, $range)) {
             $cache_record->commodityName = $this->commodities[intval($argument) - 1];
+            $cache_record->sizes = $packaging_sizes;
             $cache_record_temp = json_encode($cache_record);
             $this->record->set($this->record->sessionId, $cache_record_temp);
         }
+
+        info("commodity cache " . json_encode($cache_record));
+        info("commodity argument " . json_encode($argument));
+
 
         $this->decision->custom(function () use ($cache_record) {
             return is_object($cache_record) && strcmp("Withdraw", $cache_record->transactionType) === 0;

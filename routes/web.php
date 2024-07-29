@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DocumentPreviewController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,3 +17,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('preview-grn/{payload}', [DocumentPreviewController::class, 'grnPreview']);
+Route::get('preview-gin/{payload}', [DocumentPreviewController::class, 'ginPreview']);

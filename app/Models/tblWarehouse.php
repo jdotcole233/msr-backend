@@ -32,4 +32,9 @@ class tblWarehouse extends Model
     {
         return $this->hasMany(tblCommodity::class, 'fkWarehouseIDNo', 'warehouseIDNo');
     }
+
+    public function fees (): HasMany 
+    {
+        return $this->hasMany(tblFee::class, 'fkWarehouseIDNo', 'warehouseIDNo')->orderBy('created_at', 'desc');
+    }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DocumentPreviewController;
 use App\Http\Controllers\TblActorController;
 use App\Http\Controllers\TblCommodityController;
 use App\Http\Controllers\TblFeeController;
@@ -50,7 +51,7 @@ Route::post('v1/ussd', function (Request $request) {
             'session_id' => 'SESSIONID',
         ])
         ->setInitialState(Welcome::class)
-        ->setResponse(function(string $message, string $action) use ($request) {
+        ->setResponse(function (string $message, string $action) use ($request) {
             return [
                 'USERID' => 'hartech1',
                 'MSISDN' => $request->input('MSISDN'),
@@ -87,7 +88,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('quality-assessment/{order}', [TblOrderController::class, 'qualityAssessmentUpdate']);
 
         Route::get('warehouse-dashboard-stats', [Controller::class, 'getDashboardStats']);
-    
+
 
         // Route::post('process-withdrawal', [TblOrderController::class, 'processWithdrawal']);
 
@@ -105,5 +106,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('setpassword/{operator}', [TblOperatorController::class, 'setOperatorPassword']);
 
         Route::put('orderStatus/{order}', [TblOrderController::class, 'orderState']);
+
     });
 });

@@ -58,7 +58,7 @@ class Commodity extends State
                 ->all();
             $range = \range(1, count($this->commodities));
 
-            $packaging_sizes = $commodity->where('commodityName', $argument)->pluck('packingSize');
+            $packaging_sizes = $commodity->where('commodityName', $this->commodities[intval($argument) - 1])->pluck('packingSize');
         }
 
 

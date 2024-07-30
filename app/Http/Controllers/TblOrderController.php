@@ -92,7 +92,7 @@ class TblOrderController extends Controller
         $warehouseIDNo = Auth::user()->load(['operator'])->operator->fkWarehouseIDNo;
         $request = tblOrder::with(['actor', 'warehouse'])
             ->where('fkWarehouseIDNo', $warehouseIDNo)
-            ->whereIn('transactionType', ['STORAGE', 'OFFTAKE'])
+            ->whereIn('transactionType', ['STORAGE', 'SELL OFFER'])
             ->where(function ($query) {
                 $query
                     ->whereIn('isComplete', [MsrUtility::$UNCOMPLETED, MsrUtility::$COMPLETEDASSESSMENTFAILED])
@@ -112,7 +112,7 @@ class TblOrderController extends Controller
         $warehouseIDNo = Auth::user()->load(['operator'])->operator->fkWarehouseIDNo;
         $request = tblOrder::with(['actor', 'warehouse', 'grn'])
             ->where('fkWarehouseIDNo', $warehouseIDNo)
-            ->whereIn('transactionType', ['STORAGE', 'OFFTAKE'])
+            ->whereIn('transactionType', ['STORAGE', 'SELL OFFER'])
             ->where(function ($query) {
                 $query->where('isComplete', MsrUtility::$COMPLETED);
                 // ->orWhereNull('isComplete');
@@ -153,7 +153,7 @@ class TblOrderController extends Controller
         $warehouseIDNo = Auth::user()->load(['operator'])->operator->fkWarehouseIDNo;
         $request = tblOrder::with(['actor', 'warehouse', 'grn'])
             ->where('fkWarehouseIDNo', $warehouseIDNo)
-            ->where('transactionType', 'OFFTAKE')
+            ->where('transactionType', 'SELL OFFER')
             ->where('isComplete', MsrUtility::$COMPLETED)
             ->where('status', MsrUtility::$STATUS_ACCEPTED)
             ->whereHas('grn', function ($query) {
@@ -218,7 +218,7 @@ class TblOrderController extends Controller
     public function offtake()
     {
         return response()->json([
-            'data' => $this->getOrder('OFFTAKE')
+            'data' => $this->getOrder('SELL OFFER')
         ], 200);
     }
 
@@ -244,7 +244,7 @@ class TblOrderController extends Controller
                 ? MsrUtility::$STATUS_ACCEPTED
                 : MsrUtility::$STATUS_DECLINED,
             'lastUpdatedByName' => Auth::user()->load(['operator'])->operator->operatorName,
-            'isComplete' => in_array($order->transactionType, ['STORAGE', 'OFFTAKE']) ? MsrUtility::$UNCOMPLETED : null
+            'isComplete' => in_array($order->transactionType, ['STORAGE', 'SELL OFFER']) ? MsrUtility::$UNCOMPLETED : null
         ]);
 
         if (!$orderState) {

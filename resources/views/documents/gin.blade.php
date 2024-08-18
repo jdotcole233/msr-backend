@@ -139,7 +139,7 @@
               <td>Transacton Type</td>
           </tr>
           <tr>
-              <td>{{ $gin->warehouse->registeredName }}/td>
+              <td>{{ $gin->warehouse->registeredName }} </td>
               <td>{{ $gin->warehouse->lastUpdatedByName }}</td>
               <td>{{ $gin->order->transactionType }} </td>
           </tr>

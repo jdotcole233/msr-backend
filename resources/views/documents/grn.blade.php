@@ -200,11 +200,11 @@
 
             <tr>
                 <td>Weighing & Rebagging</td>
-                <td>{{ $fees->rebaggingFee }}</td>
+                <td>{{ $fees->rebaggingFee ?? "" }}</td>
                 <td>Storage (Bag/Month)</td>
-                <td>{{ $fees->storageFee }}</td>
-                <td>Receipt Fee</td>
-                <td></td>
+                <td>{{ $fees->storageFee ?? "" }}</td>
+                {{-- <td>Receipt Fee</td>
+                <td></td> --}}
             </tr>
             {{-- <tr>
                 <td>Weighing (Per Bag)</td>
@@ -237,12 +237,12 @@
                 <td>Fee (GHC)</td>
             </tr>
             <tr>
-                <td>Drying (Per Bag)</td>
-                <td></td>
+                <td>Loading</td>
+                <td>{{ $fees->loadingFee ?? "" }}</td>
                 <td>Cleaning (Per Bag)</td>
-                <td>{{ $fees->cleaningFee }}</td>
-                <td>Fumigation</td>
-                <td></td>
+                <td>{{ $fees->cleaningFee ?? "" }}</td>
+                <td>Unloading</td>
+                <td>{{ $fees->unloadingFee ?? "" }}</td>
             </tr>
         </table>
     </div>

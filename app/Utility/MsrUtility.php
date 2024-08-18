@@ -11,4 +11,7 @@ class MsrUtility
    public static $STATUS_ACCEPTED = 1;
    public static $STATUS_DECLINED = 0;
 
+   public static $R_MIN = 100000;
+   public static $R_MAX = 999999;
+
 }

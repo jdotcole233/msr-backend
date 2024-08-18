@@ -49,11 +49,18 @@ class TblGRNController extends Controller
             'lastUpdatedByName' => $operator->operatorName,
         ]);
 
+        $grn_idno = rand(MsrUtility::$R_MIN, MsrUtility::$R_MAX);
+        $grn_exists = tblGRN::where('grnidno', $grn_idno)->first();
+
+        while ($grn_exists) {
+            $grn_idno = rand(MsrUtility::$R_MIN, MsrUtility::$R_MAX);
+        }
+
         $data = tblGRN::create($request->all() + [
             'user_id' => $request->user()->id,
             'fkWarehouseIDNo' => $operator->fkWarehouseIDNo,
             'lastUpdatedByName' => $operator->operatorName,
-            'grnidno' => Str::upper(Str::random(10)),
+            'grnidno' => $grn_idno,
             'fkOrderId' => $request->input('requestID')
         ]);
 

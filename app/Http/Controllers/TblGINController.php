@@ -46,6 +46,12 @@ class TblGINController extends Controller
             'isComplete' => MsrUtility::$COMPLETED
         ]);
 
+        $gin_idno = rand(MsrUtility::$R_MIN, MsrUtility::$R_MAX);
+        $gin_exists = tblGIN::where('ginidno', $gin_idno)->first();
+
+        while ($gin_exists) {
+            $gin_idno = rand(MsrUtility::$R_MIN, MsrUtility::$R_MAX);
+        }
 
         $withdrawalOrder = tblGIN::create([
             'user_id' => $request->user()->id,
@@ -57,7 +63,7 @@ class TblGINController extends Controller
             'weightPerBag' => $request->input('weightPerBag'),
             'pricePerBag' => $request->input('unit_price'),
             'lastUpdatedByName' => $request->user()->load(['operator'])->operator->operatorName,
-            'ginidno' => now()->year. '-'.Str::upper(Str::random(5)), 
+            'ginidno' => $gin_idno, 
             'fkOrderId' => $request->input('requestID')
         ]);
 

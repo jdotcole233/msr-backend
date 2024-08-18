@@ -8,7 +8,7 @@ class PackageSizeBuyOrderState extends State
 {
     protected function beforeRendering(): void
     {
-        $this->menu->text("Select Package size (tonnes)");
+        $this->menu->text("Enter Package size (tonnes)");
     }
 
     protected function afterRendering(string $argument): void

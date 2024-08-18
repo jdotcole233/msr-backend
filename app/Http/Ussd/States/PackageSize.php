@@ -30,12 +30,12 @@ class PackageSize extends State
 
         if (is_object($cache_record))
         {
-            $cache_record->package_size = $this->package_size[intval($argument) - 1]; 
+            $cache_record->package_size = $cache_record->sizes[intval($argument) - 1]; 
             $cache_record = json_encode($cache_record);
             $this->record->set($this->record->sessionId, $cache_record);
         }
         
-        $range = \range(1, count($this->package_size));
+        $range = \range(1, count($cache_record->sizes));
         $this->decision->in($range, CommodityQuantity::class)
         ->any(Error::class);
 

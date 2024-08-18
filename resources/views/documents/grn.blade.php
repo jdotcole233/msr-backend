@@ -194,8 +194,8 @@
                 <td>Fee (GHC)</td>
                 <td>Service</td>
                 <td>Fee (GHC)</td>
-                <td>Service</td>
-                <td>Fee (GHC)</td>
+                {{-- <td>Service</td>
+                <td>Fee (GHC)</td> --}}
             </tr>
 
             <tr>

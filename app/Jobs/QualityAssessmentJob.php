@@ -44,7 +44,7 @@ class QualityAssessmentJob implements ShouldQueue
 
         $message .= "Hi " . $this->order->actor->name;
         $message .= "\nYour " . strtolower($this->order->transactionType) . " request for " . json_decode($this->order->orderDetails)->commodityName;
-        $message .= "\nhas  ". $this->completed == MsrUtility::$COMPLETED ? " passed " : " failed ";
+        $message .= "\nhas  {$this->completed}";
         $message .= " quality assessment.";
         
         $request = Http::post(config('app.sms_endpoint'), [

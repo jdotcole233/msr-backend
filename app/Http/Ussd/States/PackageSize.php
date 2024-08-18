@@ -17,6 +17,8 @@ class PackageSize extends State
             $this->package_size = $cache_record->sizes; 
         }
 
+        info("Package sizes ". json_encode($this->package_size));
+
         $this->menu->text("Select Package size (kg)")
         ->lineBreak(2)
         ->listing($this->package_size);

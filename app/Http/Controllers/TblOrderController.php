@@ -299,9 +299,11 @@ class TblOrderController extends Controller
         ]);
 
         $completed = MsrUtility::$COMPLETED;
+        $completed_status = "passed";
         if (strcmp(strtoupper(trim($request->state)), 'REJECT') == 0) {
             info("Passed test ");
             $completed = MsrUtility::$COMPLETEDASSESSMENTFAILED;
+            $completed_status = "failed";
         }
 
         $order->update([
@@ -315,7 +317,7 @@ class TblOrderController extends Controller
             ], 200);
         }
 
-        dispatch(new QualityAssessmentJob($order, $completed));
+        dispatch(new QualityAssessmentJob($order, $completed_status));
 
         return response()->json([
             'data' => [

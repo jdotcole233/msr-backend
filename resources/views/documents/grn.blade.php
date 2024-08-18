@@ -133,7 +133,7 @@
                 <td>Transacton Type</td>
             </tr>
             <tr>
-                <td>{{ $grn->warehouse->registeredName }}/td>
+                <td>{{ $grn->warehouse->registeredName }} </td>
                 <td>{{ $grn->warehouse->lastUpdatedByName }}</td>
                 <td>{{ $grn->order->transactionType }} ({{ $grn->maxStorageDuration }})</td>
             </tr>

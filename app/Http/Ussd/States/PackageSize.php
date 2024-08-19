@@ -27,6 +27,7 @@ class PackageSize extends State
     protected function afterRendering(string $argument): void
     { 
         $cache_record = json_decode($this->record->get($this->record->sessionId));
+        $range = \range(1, count($cache_record->sizes));
 
         if (is_object($cache_record))
         {
@@ -35,7 +36,6 @@ class PackageSize extends State
             $this->record->set($this->record->sessionId, $cache_record);
         }
         
-        $range = \range(1, count($this->package_size));
         info("Range ". json_encode($range));
         $this->decision->in($range, CommodityQuantity::class)
         ->any(Error::class);

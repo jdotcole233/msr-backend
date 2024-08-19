@@ -287,11 +287,19 @@ class TblOrderController extends Controller
             $commodity = $commodity->where('packingSize', $commodityName->package_size)->first();
         }
 
+
+        $grn_idno = rand(MsrUtility::$R_MIN, MsrUtility::$R_MAX);
+        $grn_exists = tblGRN::where('grnidno', $grn_idno)->first();
+
+        while ($grn_exists) {
+            $grn_idno = rand(MsrUtility::$R_MIN, MsrUtility::$R_MAX);
+        }
+
         $data = tblGRN::create([
             'user_id' => $user->id,
             'fkWarehouseIDNo' => $user->operator->fkWarehouseIDNo,
             'lastUpdatedByName' => $user->operator->operatorName,
-            'grnidno' => now()->year . "-" . Str::upper(Str::random(10)),
+            'grnidno' => $grn_idno,
             'assessment' => $request->input("assessment"),
             'fkOrderId' => $order->id,
             'fkActorID' => $order->fkActorID,

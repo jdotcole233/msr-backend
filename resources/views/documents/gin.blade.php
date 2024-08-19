@@ -156,7 +156,7 @@
             <td>Quantity</td>
         </tr>
         <tr>
-            <td>{{ $gin->commodity->commodityName }}</td>
+            <td>{{ $gin->commodity->commodityName ?? "" }}</td>
             <td>{{ date('Y', strtotime($gin->commodity->created_at)) }}</td>
             <td>{{ json_decode($gin->order->orderDetails)->package_size }}</td>
             <td>{{ json_decode($gin->order->orderDetails)->quantity }}</td>

@@ -36,6 +36,7 @@ class PackageSize extends State
         }
         
         $range = \range(1, count($this->package_size));
+        info("Range ". json_encode($range));
         $this->decision->in($range, CommodityQuantity::class)
         ->any(Error::class);
 

@@ -24,7 +24,7 @@ class Warehouse extends State
         } else {
             $this->menu->text("Select Warehouse")
                 ->lineBreak(2)
-                ->listing($this->warehouses ?? [])
+                ->paginateListing($this->warehouses ?? [], 1, 5)
                 ->lineBreak(2)
                 ->line("0. Main menu");
         }

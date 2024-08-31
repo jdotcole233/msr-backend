@@ -22,6 +22,8 @@ class Controller extends BaseController
             return collect($item)->count();
         });
 
+        info("ware house stats". json_encode($orders));
+
         return response()->json([
             'data' => $orders,
         ], 200);

@@ -168,7 +168,9 @@ class TblOrderController extends Controller
 
     public function grnProcessed()
     {
+        $warehouseIDNo = Auth::user()->load(['operator'])->operator->fkWarehouseIDNo;
         $grn = tblGRN::with(['commodity', 'actor', 'order'])
+            ->where('fkWarehouseIDNo', $warehouseIDNo)
             ->paginate(5);
 
         return response()->json([
@@ -178,7 +180,9 @@ class TblOrderController extends Controller
 
     public function ginProcessed()
     {
+        $warehouseIDNo = Auth::user()->load(['operator'])->operator->fkWarehouseIDNo;
         $gin = tblGIN::with(['commodity', 'actor', 'order'])
+            ->where('fkWarehouseIDNo', $warehouseIDNo)
             ->paginate(5);
 
         return response()->json([
@@ -187,7 +191,9 @@ class TblOrderController extends Controller
     }
     public function stockOnHand()
     {
+        $warehouseIDNo = Auth::user()->load(['operator'])->operator->fkWarehouseIDNo;
         $inventory = tblInventory::with(['commodity'])
+            ->where('fkWarehouseIDNo', $warehouseIDNo)
             ->paginate(5);
         return response()->json([
             'data' => $inventory
@@ -267,23 +273,22 @@ class TblOrderController extends Controller
         $user = $request->user()->load('operator');
         $data = json_decode($request->input("assessment"));
 
-        info("order ". json_encode($order));
+        info("order " . json_encode($order));
 
         $commodityName = json_decode($order->orderDetails);
-        info("commodity ". json_encode($commodityName));
+        info("commodity " . json_encode($commodityName));
         $nameParts = explode("-", $commodityName->commodityName);
-        info("name parts ". json_encode($nameParts));
+        info("name parts " . json_encode($nameParts));
         $name = $nameParts[0];
-        info("name ". json_encode($name));
+        info("name " . json_encode($name));
 
         $commodity = tblCommodity::where('commodityName', $name)
-        ->where('fkWarehouseIDNo', $order->fkWarehouseIDNo);
+            ->where('fkWarehouseIDNo', $order->fkWarehouseIDNo);
 
         if (count($nameParts) > 1) {
             $size = $nameParts[1];
             $commodity = $commodity->where('packingSize', $size)->first();
-        } else 
-        {
+        } else {
             $commodity = $commodity->where('packingSize', $commodityName->package_size)->first();
         }
 

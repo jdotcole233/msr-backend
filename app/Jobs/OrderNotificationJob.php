@@ -20,7 +20,7 @@ class OrderNotificationJob implements ShouldQueue
      *
      * @return void
      */
-    public function __construct(private tblOrder $order)
+    public function __construct(private tblOrder $order, private string $orderStatus)
     {
         //
     }
@@ -38,7 +38,7 @@ class OrderNotificationJob implements ShouldQueue
 
         $message .= "Hi " . $this->order->actor->name;
         $message .= "\nYour " . strtolower($this->order->transactionType) . " request for " . json_decode($this->order->orderDetails)->commodityName;
-        $message .= "\nhas been ". $this->order->status == 0 ? " declined." : " accepted.";
+        $message .= "\nhas been ". strtolower($this->orderStatus);
         
         $request = Http::post(config('app.sms_endpoint'), [
             'key' => config('app.sms_key'),

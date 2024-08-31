@@ -246,7 +246,6 @@ class TblOrderController extends Controller
     public function orderState(Request $request, tblOrder $order)
     {
         info(" order state ". json_encode($request->all()));
-        return 
         $orderState = $order->update([
             'status' => strcmp($request->input('status'), 'ACCEPTED') === 0
                 ? MsrUtility::$STATUS_ACCEPTED
@@ -262,7 +261,7 @@ class TblOrderController extends Controller
         }
 
         $order = tblOrder::find($order->id);
-        dispatch(new OrderNotificationJob($order));
+        dispatch(new OrderNotificationJob($order, $request->input('status')));
 
         return response()->json([
             'data' => $request->input('status')

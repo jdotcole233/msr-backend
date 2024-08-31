@@ -245,6 +245,8 @@ class TblOrderController extends Controller
 
     public function orderState(Request $request, tblOrder $order)
     {
+        info(" order state ". json_encode($request->all()));
+        return 
         $orderState = $order->update([
             'status' => strcmp($request->input('status'), 'ACCEPTED') === 0
                 ? MsrUtility::$STATUS_ACCEPTED
